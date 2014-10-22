@@ -24,7 +24,11 @@ public class Main : GLMonoBehaviour
 
     // The map (that converts between world and grid coordinates).
     private IMap3D<RectPoint> map;
+
+    //Unit that moves with user click
     private UnitMover clickUnit;
+
+    //Unit that moves automatically
     private UnitMover autoUnit;
 
     public IMap3D<RectPoint> WorldMap
@@ -119,19 +123,16 @@ public class Main : GLMonoBehaviour
                 grid [point].OnClick();
             }
 
+ 
             clickUnit.targetPoint = point;
         }
 
+        //If autoUnit has reach is destination, move it to the next tile
         if (autoUnit.hasReachedDestination())
         {
             autoUnit.targetPoint = (autoUnit.targetPoint.Y < 19 ?
                                     new RectPoint(autoUnit.targetPoint.X, autoUnit.targetPoint.Y + 1) :
                                     new RectPoint((autoUnit.targetPoint.X + 1) % 20, 0));
         }
-    }
-
-    public RectPoint GetMapPoint(Vector3 worldPosition)
-    {
-        return map [worldPosition];
     }
 }
