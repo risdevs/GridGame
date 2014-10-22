@@ -31,6 +31,9 @@ public class Main : GLMonoBehaviour
     //Unit that moves automatically
     private UnitMover autoUnit;
 
+    private const int MAP_W = 10;
+    private const int MAP_H = 10;
+
     public IMap3D<RectPoint> WorldMap
     {
         get
@@ -55,7 +58,7 @@ public class Main : GLMonoBehaviour
     private void BuildGrid()
     {
         // Creates a grid in a rectangular shape.
-        grid = RectGrid<SpriteCell>.Rectangle(20, 20);
+        grid = RectGrid<SpriteCell>.Rectangle(MAP_W, MAP_H);
 
         // Creates a map...
         map = new RectMap(cellPrefab.Dimensions)    // The cell dimensions usually correspond to the visual 
@@ -83,18 +86,8 @@ public class Main : GLMonoBehaviour
             cell.transform.localScale = Vector3.one;    //Readjust the scale - the re-parenting above may have changed it.
             cell.transform.localPosition = worldPoint;  //Set the localPosition of the cell.
 
-            cell.FrameIndex = point.X % 2;
-
-            if (point.X == point.Y)
-                cell.Color = ExampleUtils.ColorFromInt(255, 0, 0);
-            else
-                cell.Color = ExampleUtils.ColorFromInt(100, 100, 100);
-
-
-            if (point.X == 2 && point.Y == 1)
-                cell.Color = ExampleUtils.ColorFromInt(0, 255, 0);
-
-            //cell.Color = ExampleUtils.Colors[point.GetColor4() % 4 * 4]; //Sets the color of the cell
+            cell.FrameIndex = 0;
+            cell.Color = new Color(1, 1, 1); //ExampleUtils.Colors[point.GetColor4() % 4 * 4]; //Sets the color of the cell
             //See http://gamelogic.co.za/2013/12/18/what-are-grid-colorings/ for more information on colorings.
 
             cell.name = point.ToString(); // Makes it easier to identify cells in the editor.
@@ -121,18 +114,17 @@ public class Main : GLMonoBehaviour
             {
                 //... and set the color of the cell at that point to white if it does.
                 grid [point].OnClick();
+                
+                clickUnit.targetPoint = point;
             }
-
- 
-            clickUnit.targetPoint = point;
         }
 
         //If autoUnit has reach is destination, move it to the next tile
         if (autoUnit.hasReachedDestination())
         {
-            autoUnit.targetPoint = (autoUnit.targetPoint.Y < 19 ?
+            autoUnit.targetPoint = (autoUnit.targetPoint.Y < MAP_H  -1 ?
                                     new RectPoint(autoUnit.targetPoint.X, autoUnit.targetPoint.Y + 1) :
-                                    new RectPoint((autoUnit.targetPoint.X + 1) % 20, 0));
+                                    new RectPoint((autoUnit.targetPoint.X + 1) % MAP_W, 0));
         }
     }
 }

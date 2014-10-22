@@ -222,6 +222,7 @@ namespace Gamelogic.Grids
 			{
 				if (!__CompilerHints.__CompilerHint__Rect()) return;
 				if (!__CompilerHints.__CompilerHint__Diamond()) return;
+                /*
 				if (!__CompilerHints.__CompilerHint__PointyHex()) return;
 				if (!__CompilerHints.__CompilerHint__FlatHex()) return;
 
@@ -231,6 +232,7 @@ namespace Gamelogic.Grids
 				if (!__CompilerHints.__CompilerHint__FlatRhomb()) return;
 
 				if (!__CompilerHints.__CompilerHint__Cairo()) return;
+    */            
 			}
 #endif
 			if (cellPrefab == null)
