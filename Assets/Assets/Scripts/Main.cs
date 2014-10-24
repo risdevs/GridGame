@@ -75,16 +75,16 @@ public class Main : GLMonoBehaviour
             tmp.transform.position = new Vector3(i * rt.rect.width, 0);
             tmp.transform.parent = UIRoot.transform;
             tmp.GetComponent<DeployUnitButton>().type = i;
-            tmp.onValueChanged.AddListener(delegate(bool enabled)
+            tmp.onValueChanged.AddListener(delegate(Toggle toggle)
             {
                 //int a = tmp.GetComponent<DeployUnitButton>().type;
-                if (enabled)
+                if (toggle.isOn)
                 {
                     if (selectedButton != -1)
                     {
                         deployButtons[selectedButton].isOn = false;
                     }
-                    selectedButton = tmp.GetComponent<DeployUnitButton>().type;
+                    selectedButton = toggle.GetComponent<DeployUnitButton>().type;
 
                 } else 
                 {
