@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class MapEditor : MonoBehaviour
 {
@@ -45,6 +48,9 @@ public class MapEditor : MonoBehaviour
 	{
 		Vector3 tile = gridRendering.WorldToTile(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 		Debug.Log("tile: " + tile);
+
+		if (tile.x < 0 || tile.y < 0)
+						return;
 		
 		int xy = ((int)tile.y) * GridRendering.COLS + ((int)tile.x);
 		
@@ -73,4 +79,22 @@ public class MapEditor : MonoBehaviour
 			Destroy (tr.gameObject);
         }
     }
+
+	public void SaveMap()
+	{
+		System.Collections.ArrayList list = new ArrayList ();
+
+		for(int i = 0; i < tiles.Length; i++)
+		{
+			if(tiles[i] != null)
+			{
+				list.Add(new MapData(tiles[i].tile, tiles[i].currentSprite));
+			}
+		}
+
+		BinaryFormatter bf = new BinaryFormatter();
+		FileStream file = File.Create (Application.persistentDataPath + "/savedGames.gd");
+		bf.Serialize (file, list);
+		file.Close();
+	}
 }

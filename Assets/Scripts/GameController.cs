@@ -1,5 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+
 
 public class GameController : MonoBehaviour
 {
@@ -8,7 +12,8 @@ public class GameController : MonoBehaviour
 
     // Use this for initialization
     void Start()
-    {
+	{
+		//LoadBasicLevel ();
 		LoadLevel ();
     }
     
@@ -18,6 +23,26 @@ public class GameController : MonoBehaviour
     }
 
 	private void LoadLevel()
+	{
+		if (File.Exists (Application.persistentDataPath + "/savedGames.gd"))
+		{
+			BinaryFormatter bf = new BinaryFormatter();
+			FileStream file = File.Open (Application.persistentDataPath + "/savedGames.gd", FileMode.Open);
+			ArrayList list = (ArrayList) bf.Deserialize(file);
+			file.Close();
+
+			foreach (MapData md in list)
+			{
+				Debug.Log("MD pos:" + md.position + " sprite:" + md.sprite);
+				TileRenderer tr = (TileRenderer) Instantiate (tileRenderer);
+				tr.tile = new Vector3 (md.x, md.y);
+				tr.currentSprite = md.sprite;
+				tr.transform.parent = mapRoot.transform;
+			}
+		}
+	}
+
+	private void LoadBasicLevel()
 	{
 		//Replace for a proper level loading
 		for (int i = 0; i < GridRendering.COLS; i++)
