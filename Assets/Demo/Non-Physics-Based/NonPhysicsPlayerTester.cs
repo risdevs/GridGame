@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 
 public class NonPhysicsPlayerTester : MonoBehaviour
@@ -23,7 +24,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 	public GameObject LeftControl;
 	public GameObject RightControl;
 	public GameObject JumpControl;
-
+	
 	void Awake()
 	{
 		_animator = GetComponent<Animator>();
@@ -62,7 +63,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 
 	#endregion
 
-	GameObject GetHitObject(Vector3 pos)  {
+	GameObject GetHitObjects(Vector3 pos) {
 		RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(pos), Vector2.zero);
 		if (hit.collider != null) {
 			return hit.collider.gameObject;
@@ -71,24 +72,72 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 		}
 	}
 
-	GameObject GetHitObject() {
-		if (Input.GetMouseButton(0)) {
-			return GetHitObject(Input.mousePosition);
+	List<GameObject> GetHitObjects() {
+		List<GameObject> gameObjects = new List<GameObject> ();
+		if (Input.touchCount == 0) {
+			// MOUSE INPUT
+			if (Input.GetMouseButton(0)) {
+				RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+				if (hit.collider != null) {
+					gameObjects.Add (hit.collider.gameObject);
+				}
+			}
+		} else {
+			// TOUCH INPUT
+			for (int i = 0; i < Input.touchCount; i++) {
+				Vector3 wp = Camera.main.ScreenToWorldPoint(Input.GetTouch(i).position);
+				Vector2 touchPos = new Vector2(wp.x, wp.y);
+				Collider2D collider2D = Physics2D.OverlapPoint(touchPos);
+
+				if (collider2D != null)
+				{
+					//your code
+					gameObjects.Add(collider2D.gameObject);
+				}
+
+			}
 		}
-		return null;
+		return gameObjects;
+	}
+
+	void Start() {
+		Input.multiTouchEnabled = true; 
 	}
 
 	// the Update loop contains a very simple example of moving the character around and controlling the animation
 	void Update()
 	{
-		GameObject hitObject = GetHitObject ();
+		bool RightPressed = false;
+		bool LeftPressed = false;
+		bool JumpPressed = false;
+
+		if( Input.GetKey( KeyCode.RightArrow )) {
+			RightPressed = true;
+		}
+		if (Input.GetKey( KeyCode.LeftArrow )) {
+			LeftPressed = true;
+		}
+		if (Input.GetKey( KeyCode.UpArrow )) {
+			JumpPressed = true;
+		}
+
+		List<GameObject> hitObjects = GetHitObjects ();
+		foreach (GameObject hitObject in hitObjects) {
+			if (hitObject == LeftControl) {
+				LeftPressed = true;
+			} else if (hitObject == RightControl) {
+				RightPressed = true;
+			} else if (hitObject == JumpControl) {
+				JumpPressed = true;
+			}
+		}
 		// grab our current _velocity to use as a base for all calculations
 		_velocity = _controller.velocity;
 
 		if( _controller.isGrounded )
 			_velocity.y = 0;
 
-		if( Input.GetKey( KeyCode.RightArrow ) || hitObject ==  RightControl)
+		if( RightPressed )
 		{
 			normalizedHorizontalSpeed = 1;
 			if( transform.localScale.x < 0f )
@@ -97,7 +146,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 			if( _controller.isGrounded )
 				_animator.Play( Animator.StringToHash( "Run" ) );
 		}
-		else if( Input.GetKey( KeyCode.LeftArrow ) || hitObject == LeftControl)
+		else if( LeftPressed )
 		{
 			normalizedHorizontalSpeed = -1;
 			if( transform.localScale.x > 0f )
@@ -116,7 +165,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 
 
 		// we can only jump whilst grounded
-		if( _controller.isGrounded && (Input.GetKeyDown( KeyCode.UpArrow ) || hitObject == JumpControl))
+		if( _controller.isGrounded && JumpPressed )
 		{
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
 			_animator.Play( Animator.StringToHash( "Jump" ) );
