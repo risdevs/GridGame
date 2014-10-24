@@ -4,12 +4,18 @@ using System.Collections;
 public class BlockMover : MonoBehaviour
 {
 
+	public Vector3 oscilation;
+
     private Vector3 targetPosition;
+
+	private bool sum;
+
 
     // Use this for initialization
     void Start()
     {
-    
+		sum = true;
+		targetPosition = transform.position;
     }
     
     // Update is called once per frame
@@ -20,13 +26,14 @@ public class BlockMover : MonoBehaviour
             UpdatePosition();
         } else
         {
-            targetPosition = transform.position + new Vector3(10, 10);
+			targetPosition = (sum ? transform.position + oscilation : transform.position - oscilation);
+			sum = !sum;
         }
     }
 
     void UpdatePosition()
     {
-        transform.position = Vector3.Lerp(transform.position, targetPosition, 0.5f * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime);
     }
 
     public bool hasReachedDestination()
