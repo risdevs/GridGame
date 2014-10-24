@@ -3,6 +3,7 @@ using System.Collections;
 
 public class SinglePlayerMenu : MonoBehaviour {
 
+
 	// Use this for initialization
 	void Start () {
 
@@ -18,6 +19,7 @@ public class SinglePlayerMenu : MonoBehaviour {
     }
 
     public void ClickLevel(int level) {
-
+		GameController.LevelToLoad = level;
+		Application.LoadLevel("Game");
     }
 }
