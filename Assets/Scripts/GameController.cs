@@ -3,11 +3,12 @@ using System.Collections;
 
 public class GameController : MonoBehaviour
 {
+	public static int LevelToLoad = 1; 
 
     // Use this for initialization
     void Start()
     {
-        Application.LoadLevelAdditive("Level2");
+        Application.LoadLevelAdditive("Level" + LevelToLoad);
         
         //Application.LoadLevelAdditive("Level" + Random.Range(1,3));
     }
