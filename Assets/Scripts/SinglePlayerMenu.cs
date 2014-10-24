@@ -19,7 +19,7 @@ public class SinglePlayerMenu : MonoBehaviour {
     }
 
     public void ClickLevel(int level) {
-		GameController.LevelToLoad = level;
+		//GameController.LevelToLoad = level;
 		Application.LoadLevel("Game");
     }
 }

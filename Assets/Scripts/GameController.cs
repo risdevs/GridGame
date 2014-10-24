@@ -3,8 +3,6 @@ using System.Collections;
 
 public class GameController : MonoBehaviour
 {
-	public static int LevelToLoad = 1; 
-
 	public TileRenderer tileRenderer;
 	public GameObject mapRoot;
 

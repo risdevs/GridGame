@@ -39,9 +39,4 @@ public class MapEditor : MonoBehaviour
 			}
 		}
 	}
-
-	void OnMouseDrag() 
-	{
-		Debug.Log ("Drag");
-	}
 }
