@@ -6,6 +6,7 @@
 using Gamelogic;
 using Gamelogic.Grids;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Main : GLMonoBehaviour
 {
@@ -14,6 +15,8 @@ public class Main : GLMonoBehaviour
     // related to your game.
     public SpriteCell cellPrefab;
     public UnitMover unitPrefab;
+    public Toggle deployUnitPrefab;
+    public Image UIRoot;
 
     // All cells will be parented to this object.
     public GameObject root;
@@ -34,6 +37,9 @@ public class Main : GLMonoBehaviour
     private const int MAP_W = 10;
     private const int MAP_H = 10;
 
+    private Toggle[] deployButtons;
+    private int selectedButton;
+
     public IMap3D<RectPoint> WorldMap
     {
         get
@@ -45,6 +51,7 @@ public class Main : GLMonoBehaviour
     public void Start()
     {       
         BuildGrid();
+        BuildUI();
 
         clickUnit = Instantiate(unitPrefab);
         clickUnit.main = this;
@@ -53,6 +60,40 @@ public class Main : GLMonoBehaviour
         autoUnit = Instantiate(unitPrefab);
         autoUnit.main = this;
         autoUnit.transform.parent = units.transform;
+    }
+
+    private void BuildUI()
+    {
+        selectedButton = -1;
+
+        deployButtons = new Toggle[5];
+
+        for (var i = 0; i < 5; i++)
+        {
+            Toggle tmp = Instantiate(deployUnitPrefab);
+            RectTransform rt = (RectTransform) tmp.transform;
+            tmp.transform.position = new Vector3(i * rt.rect.width, 0);
+            tmp.transform.parent = UIRoot.transform;
+            tmp.GetComponent<DeployUnitButton>().type = i;
+            tmp.onValueChanged.AddListener(delegate(bool enabled)
+            {
+                //int a = tmp.GetComponent<DeployUnitButton>().type;
+                if (enabled)
+                {
+                    if (selectedButton != -1)
+                    {
+                        deployButtons[selectedButton].isOn = false;
+                    }
+                    selectedButton = tmp.GetComponent<DeployUnitButton>().type;
+
+                } else 
+                {
+                    selectedButton = -1;
+                }
+            });
+
+            deployButtons [i] = tmp;
+        }
     }
 
     private void BuildGrid()
@@ -126,5 +167,11 @@ public class Main : GLMonoBehaviour
                                     new RectPoint(autoUnit.targetPoint.X, autoUnit.targetPoint.Y + 1) :
                                     new RectPoint((autoUnit.targetPoint.X + 1) % MAP_W, 0));
         }
+    }
+
+    private bool onDeployButtonSelected(Toggle t)
+    {
+
+        return true;
     }
 }
