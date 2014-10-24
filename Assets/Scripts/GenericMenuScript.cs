@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MultiPlayerMenu : MonoBehaviour {
+public class GenericMenuScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -13,7 +13,7 @@ public class MultiPlayerMenu : MonoBehaviour {
 	
 	}
 
-    public void ClickBack() {
-        Application.LoadLevel("Main");
-    }
+	public void OpenScene(string scene) {
+		Application.LoadLevel(scene);
+	}
 }
