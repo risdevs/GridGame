@@ -21,6 +21,10 @@ public class BlockMover : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		if (Vector3.Magnitude (oscilation) == 0)
+						return;
+
+
         if (!hasReachedDestination())
         {
             UpdatePosition();

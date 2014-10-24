@@ -60,7 +60,6 @@ public class PlayerController : MonoBehaviour
         float xMax = cameraPosition.x + xDist;
         float xMin = cameraPosition.x - xDist;
 
-        float height = GetComponent<SpriteRenderer>().sprite.rect.size.y;
         float yDist = mainCamera.orthographicSize; 
         float yMax = cameraPosition.y + yDist;
         float yMin = cameraPosition.y - yDist;
