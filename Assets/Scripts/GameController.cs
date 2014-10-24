@@ -6,25 +6,28 @@ public class GameController : MonoBehaviour
 	public static int LevelToLoad = 1; 
 
 	public TileRenderer tileRenderer;
+	public GameObject mapRoot;
 
     // Use this for initialization
     void Start()
     {
-        //Application.LoadLevelAdditive("Level" + LevelToLoad);
-        
-        //Application.LoadLevelAdditive("Level" + Random.Range(1,3));
-
-
-		for (int i = 0; i < GridRendering.COLS; i++)
-		{
-			TileRenderer tr = (TileRenderer) Instantiate (tileRenderer);
-			tr.tile = new Vector3 (i, 0);
-			tr.currentSprite = i % 3;
-		}
+		LoadLevel ();
     }
     
     // Update is called once per frame
     void Update()
     {
     }
+
+	private void LoadLevel()
+	{
+		//Replace for a proper level loading
+		for (int i = 0; i < GridRendering.COLS; i++)
+		{
+			TileRenderer tr = (TileRenderer) Instantiate (tileRenderer);
+			tr.tile = new Vector3 (i, 0);
+            tr.currentSprite = i % 3;
+			tr.transform.parent = mapRoot.transform;
+        }
+	}
 }

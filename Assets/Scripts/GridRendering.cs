@@ -11,6 +11,8 @@ public class GridRendering : MonoBehaviour
 	private float xStart, xEnd;
 	public float tileSize;
 
+	public bool drawGrid = false;
+
 	void Start ()
 	{
 		Vector3 newPosition = transform.position; 
@@ -48,6 +50,9 @@ public class GridRendering : MonoBehaviour
 
 	void OnPostRender ()
 	{
+		if (!drawGrid)
+						return;
+
 		GL.PushMatrix ();
 
 		CreateLineMaterial ();
@@ -81,4 +86,13 @@ public class GridRendering : MonoBehaviour
 		return TileToWorld (v.x, v.y);
 	}
 
+	public Vector3 WorldToTile (float x, float y)
+	{
+		return new Vector3 (Mathf.Floor((x - xStart) / tileSize), Mathf.Floor((y - yStart) / tileSize));
+	}
+
+	public Vector3 WorldToTile(Vector3 v)
+	{
+		return WorldToTile (v.x, v.y);
+	}
 }
