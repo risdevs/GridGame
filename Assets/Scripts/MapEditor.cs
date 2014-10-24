@@ -27,6 +27,28 @@ public class MapEditor : MonoBehaviour
 	{
 		gridRendering = Camera.main.GetComponent<GridRendering> ();
 		tiles = new TileRenderer[GridRendering.COLS * GridRendering.ROWS];
+
+		LoadLevel ();
+	}
+	
+	private void LoadLevel()
+	{
+		if (File.Exists (GetSaveDataFile()))
+		{
+			BinaryFormatter bf = new BinaryFormatter();
+			FileStream file = File.Open (GetSaveDataFile(), FileMode.Open);
+			ArrayList list = (ArrayList) bf.Deserialize(file);
+			file.Close();
+			
+			foreach (MapData md in list)
+			{
+				Debug.Log("MD pos:" + md.position + " sprite:" + md.sprite);
+				TileRenderer tr = (TileRenderer) Instantiate (tilePrefab);
+				tr.tile = new Vector3 (md.x, md.y);
+                tr.currentSprite = md.sprite;
+                tr.transform.parent = mapRoot.transform;
+            }
+        }
 	}
 
 	// Update is called once per frame
@@ -69,6 +91,9 @@ public class MapEditor : MonoBehaviour
 		Vector3 tile = gridRendering.WorldToTile(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 		Debug.Log("tile: " + tile);
 		
+		if (tile.x < 0 || tile.y < 0)
+            return;
+        
 		int xy = ((int)tile.y) * GridRendering.COLS + ((int)tile.x);
 		
 		if (tiles[xy] != null)
@@ -79,6 +104,13 @@ public class MapEditor : MonoBehaviour
 			Destroy (tr.gameObject);
         }
     }
+
+	public void ChangeTile(UnityEngine.UI.Button b)
+	{
+		selectedTile++;
+		selectedTile %= sprites.Length;
+		b.GetComponentInChildren<UnityEngine.UI.Text> ().text = "" + selectedTile;
+	}
 
 	public void SaveMap()
 	{
@@ -93,8 +125,30 @@ public class MapEditor : MonoBehaviour
 		}
 
 		BinaryFormatter bf = new BinaryFormatter();
-		FileStream file = File.Create (Application.persistentDataPath + "/savedGames.gd");
+		FileStream file = File.Create (GetSaveDataFile());
 		bf.Serialize (file, list);
 		file.Close();
+	}
+
+	public void SwitchMode(UnityEngine.UI.Button b)
+	{
+		if (currentMode == MODE.BUILD)
+		{
+			currentMode = MODE.DELETE;
+			b.GetComponentInChildren<UnityEngine.UI.Text> ().text = "DELETE";
+		} else {
+			currentMode = MODE.BUILD;
+			b.GetComponentInChildren<UnityEngine.UI.Text> ().text = "BUILD";
+		}
+	}
+
+	private string GetSaveDataFile()
+	{
+		if(Application.platform == RuntimePlatform.IPhonePlayer)
+		{
+			return  Utils.GetiPhoneDocumentsPath() + "/savedGames.gd";
+		} else{
+			return Application.persistentDataPath + "/savedGames.gd";
+		}
 	}
 }
