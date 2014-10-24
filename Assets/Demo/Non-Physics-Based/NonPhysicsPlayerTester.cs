@@ -20,7 +20,9 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 	private Vector3 _velocity;
 
 
-
+	public GameObject LeftControl;
+	public GameObject RightControl;
+	public GameObject JumpControl;
 
 	void Awake()
 	{
@@ -60,17 +62,33 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 
 	#endregion
 
+	GameObject GetHitObject(Vector3 pos)  {
+		RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(pos), Vector2.zero);
+		if (hit.collider != null) {
+			return hit.collider.gameObject;
+		} else {
+			return null;
+		}
+	}
+
+	GameObject GetHitObject() {
+		if (Input.GetMouseButton(0)) {
+			return GetHitObject(Input.mousePosition);
+		}
+		return null;
+	}
 
 	// the Update loop contains a very simple example of moving the character around and controlling the animation
 	void Update()
 	{
+		GameObject hitObject = GetHitObject ();
 		// grab our current _velocity to use as a base for all calculations
 		_velocity = _controller.velocity;
 
 		if( _controller.isGrounded )
 			_velocity.y = 0;
 
-		if( Input.GetKey( KeyCode.RightArrow ) )
+		if( Input.GetKey( KeyCode.RightArrow ) || hitObject ==  RightControl)
 		{
 			normalizedHorizontalSpeed = 1;
 			if( transform.localScale.x < 0f )
@@ -79,7 +97,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 			if( _controller.isGrounded )
 				_animator.Play( Animator.StringToHash( "Run" ) );
 		}
-		else if( Input.GetKey( KeyCode.LeftArrow ) )
+		else if( Input.GetKey( KeyCode.LeftArrow ) || hitObject == LeftControl)
 		{
 			normalizedHorizontalSpeed = -1;
 			if( transform.localScale.x > 0f )
@@ -98,7 +116,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 
 
 		// we can only jump whilst grounded
-		if( _controller.isGrounded && Input.GetKeyDown( KeyCode.UpArrow ) )
+		if( _controller.isGrounded && (Input.GetKeyDown( KeyCode.UpArrow ) || hitObject == JumpControl))
 		{
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
 			_animator.Play( Animator.StringToHash( "Jump" ) );
