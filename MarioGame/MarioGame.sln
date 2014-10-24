@@ -1,7 +1,7 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{2903E337-539D-86A9-7064-92F8F65A600C}"
+# Visual Studio 2008
+
+Project("{A4238382-AB27-4305-FFF5-48A758842857}") = "MarioGame", "Assembly-CSharp.csproj", "{2903E337-539D-86A9-7064-92F8F65A600C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -14,7 +14,10 @@ Global
 		{2903E337-539D-86A9-7064-92F8F65A600C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2903E337-539D-86A9-7064-92F8F65A600C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+						GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1
@@ -48,7 +51,5 @@ Global
 		$3.inheritsScope = text/plain
 		$3.scope = text/plain
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
+
 EndGlobal
