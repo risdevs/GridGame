@@ -3,6 +3,13 @@ using System.Collections;
 
 public class MapEditor : MonoBehaviour
 {
+	public enum MODE
+	{
+		BUILD,
+		DELETE
+	}
+	public MODE currentMode;
+
 	public Sprite[] sprites;
 	public int selectedTile;
 	public TileRenderer tilePrefab;
@@ -24,19 +31,46 @@ public class MapEditor : MonoBehaviour
 	{
 		if (Input.GetMouseButton (0))
 		{
-			Vector3 tile = gridRendering.WorldToTile(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-			Debug.Log("tile: " + tile);
-
-			int xy = ((int)tile.y) * GridRendering.COLS + ((int)tile.x);
-
-			if (tiles[xy] == null)
+			if(currentMode == MODE.BUILD)
 			{
-				TileRenderer tr = (TileRenderer)Instantiate(tilePrefab);
-				tr.tile = tile;
-				tr.transform.parent = mapRoot.transform;
-				tr.currentSprite = selectedTile;
-				tiles[xy] = tr;
+				BuildTile();
+			}
+			else{
+				RemoveTile();
 			}
 		}
 	}
+	
+	private void BuildTile()
+	{
+		Vector3 tile = gridRendering.WorldToTile(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+		Debug.Log("tile: " + tile);
+		
+		int xy = ((int)tile.y) * GridRendering.COLS + ((int)tile.x);
+		
+		if (tiles[xy] == null)
+		{
+			TileRenderer tr = (TileRenderer)Instantiate(tilePrefab);
+			tr.tile = tile;
+			tr.transform.parent = mapRoot.transform;
+			tr.currentSprite = selectedTile;
+            tiles[xy] = tr;
+        }
+	}
+	
+	private void RemoveTile()
+	{
+		Vector3 tile = gridRendering.WorldToTile(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+		Debug.Log("tile: " + tile);
+		
+		int xy = ((int)tile.y) * GridRendering.COLS + ((int)tile.x);
+		
+		if (tiles[xy] != null)
+		{
+			TileRenderer tr = tiles[xy];
+			tiles[xy] = null;
+			tr.transform.parent = null;
+			Destroy (tr.gameObject);
+        }
+    }
 }
