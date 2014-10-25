@@ -5,9 +5,10 @@ public class BlockMover : MonoBehaviour
 {
 
 	public Vector3 oscilation;
+    public float speed = 0.040f;
 
     private Vector3 targetPosition;
-
+    private Vector3 direction;
 	private bool sum;
 
 
@@ -15,33 +16,39 @@ public class BlockMover : MonoBehaviour
     void Start()
     {
 		sum = true;
-		targetPosition = transform.position;
+		targetPosition = transform.position + oscilation;
+        direction = Vector3.Normalize(oscilation);
     }
     
     // Update is called once per frame
     void Update()
     {
-		if (Vector3.Magnitude (oscilation) == 0)
-						return;
-
-
-        if (!hasReachedDestination())
+        if (hasReachedDestination())
         {
-            UpdatePosition();
-        } else
-        {
-			targetPosition = (sum ? transform.position + oscilation : transform.position - oscilation);
-			sum = !sum;
-        }
-    }
+            UpdateDestination();
+        } 
 
-    void UpdatePosition()
-    {
-        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime);
+        Debug.Log("Mover position:" + transform.position + " Target position:" + targetPosition);
+
+        transform.position = transform.position + direction * speed;
     }
 
     public bool hasReachedDestination()
     {
-        return Vector3.Distance(transform.position, targetPosition) < 1e-1f;
+        return Vector3.Distance(transform.position, targetPosition) < 1;
+    }
+
+    void UpdateDestination()
+    {
+        if (sum)
+        {
+            targetPosition = transform.position - 2 * oscilation;
+        } else
+        {
+            targetPosition = transform.position - 2 * oscilation;
+        }
+        sum = !sum;
+        direction.x *= -1;
+        direction.y *= -1;
     }
 }

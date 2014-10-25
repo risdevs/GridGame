@@ -20,7 +20,7 @@ public class MapEditor : MonoBehaviour
 
 	public MODE currentMode;
 
-	public Sprite[] sprites;
+	private Sprite[] sprites;
 	public int selectedTile;
 	public TileRenderer tilePrefab;
 	public GameObject mapRoot;
@@ -40,6 +40,8 @@ public class MapEditor : MonoBehaviour
         Debug.Log("START");
         gridRendering = Camera.main.GetComponent<GridRendering> ();
 		tiles = new TileRenderer[GridRendering.COLS * GridRendering.ROWS];
+
+        sprites = tilePrefab.sprites;
 
 
         LoadUI();
@@ -68,7 +70,7 @@ public class MapEditor : MonoBehaviour
             b = Instantiate(tileButtonPrefab) as Button;
             b.GetComponent<Image>().sprite = sprites[i];
             b.transform.parent = mainCanvas.transform;
-            b.transform.localPosition = new Vector3(50 + (sprites[i].bounds.size.x + 25) * 3 * (i-1) - 320, -150);
+            b.transform.localPosition = new Vector3(50 + (sprites[i].bounds.size.x + 25) * 3 * (i-1) - 320, -170);
             b.transform.localScale = new Vector3(3,3);
 
             int j = i;
