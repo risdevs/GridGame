@@ -119,35 +119,19 @@ public class MapEditor : MonoBehaviour
 	}
 
 	public void printButtonAction() {
-
-		/*
-		List<List<float>> list = new List<List<float>>();
-		foreach (MapTile t in tiles)
-		{
-			list.Add(new List<float>(){t.x, t.y, t.sprite});
-		}
+		string strinMap = "listLevelsSPM.Add(new ParseController.MapEntity(77777,new int[,]{";
 		
-		parseObject ["map"] = list;
-		parseObject.SaveAsync();
-		*/
-
-
-		/*
-
-		List<List<float>> list = new List<List<float>>();
-		//String que luego copiaremos para single Player
-		string strinMap = "listLevelsSPM.Add(new ParseController.MapEntity('MAP_NAME_HERE',new int[,]{";
-		
-		foreach (MapTile t in tiles)
+		for(int i = 0; i < tiles.Length; i++)
 		{
-			list.Add(new List<float>(){t.x, t.y, t.sprite});
-			strinMap = strinMap + "{" + t.x + "," + t.y + "," +  t.sprite + "},";
+			if(tiles[i] != null)
+			{
+				strinMap = strinMap + "{" + tiles[i].tile.x + "," + tiles[i].tile.y + "," + tiles[i].currentSprite + "},";
+			}
 		}
 		
 		strinMap = strinMap.Remove(strinMap.Length - 1) + "}));";
-		//parseObject ["map"] = list;
-		//parseObject.SaveAsync();
-*/
+		
+		Debug.Log("CODIGO A COPIAR >>>>     " + strinMap);
 
 	}
 
