@@ -13,9 +13,38 @@ public class GameController : MonoBehaviour
     
     public UnityEngine.UI.Button b;
 
+    public static ParseController.MapEntity mapToLoad = null;
+
     // Use this for initialization
     void Start()
-      	{
+    {
+        if (mapToLoad == null)
+        {
+            mapToLoad = new ParseController.MapEntity();
+        }
+        foreach (ParseController.MapTile t in mapToLoad.tiles) {
+            TileRenderer tr = (TileRenderer) Instantiate (tileRenderer);
+            tr.tile = new Vector3 (t.x, t.y);
+            tr.currentSprite = t.sprite;
+            tr.transform.parent = mapRoot.transform;
+            if (tr.currentSprite == 3)
+            {
+                BlockFollower follower = tr.gameObject.AddComponent("BlockFollower") as BlockFollower;
+                follower.target = player;
+            }
+            
+            
+            if (tr.currentSprite == 2)
+            {
+                BlockFireballs fireballs = tr.gameObject.AddComponent("BlockFireballs") as BlockFireballs;
+            }
+            if (tr.currentSprite == 2)
+            {
+                tr.gameObject.AddComponent("BlockFireballs");
+            }
+        }
+
+
     }
     
     // Update is called once per frame
@@ -27,45 +56,6 @@ public class GameController : MonoBehaviour
     {
         Debug.Log("clickDown");
     }
-
-    IEnumerator LoadMap()
-    {
-
-
-        ParseController.ListMapOperation list = new ParseController.ListMapOperation();
-        list.run();
-        while (!list.IsCompleted)
-            yield return null;
-        
-        foreach (ParseController.MapEntity map in list.result)
-        {
-            Debug.Log(map.parseObject.ObjectId);
-            foreach (ParseController.MapTile t in map.tiles) {
-                TileRenderer tr = (TileRenderer) Instantiate (tileRenderer);
-                tr.tile = new Vector3 (t.x, t.y);
-                tr.currentSprite = t.sprite;
-                tr.transform.parent = mapRoot.transform;
-                if (tr.currentSprite == 3)
-                {
-                    BlockFollower follower = tr.gameObject.AddComponent("BlockFollower") as BlockFollower;
-                    follower.target = player;
-                }
-                
-                
-                if (tr.currentSprite == 2)
-                {
-                    BlockFireballs fireballs = tr.gameObject.AddComponent("BlockFireballs") as BlockFireballs;
-                }
-                if (tr.currentSprite == 2)
-                {
-                    tr.gameObject.AddComponent("BlockFireballs");
-                }
-            }
-            //mapEntity = map;
-            break;
-        }
-
-	}
 
 	private void LoadBasicLevel()
 	{
