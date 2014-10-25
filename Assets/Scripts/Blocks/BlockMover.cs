@@ -45,7 +45,7 @@ public class BlockMover : MonoBehaviour
             targetPosition = transform.position - 2 * oscilation;
         } else
         {
-            targetPosition = transform.position - 2 * oscilation;
+            targetPosition = transform.position + 2 * oscilation;
         }
         sum = !sum;
         direction.x *= -1;

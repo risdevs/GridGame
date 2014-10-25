@@ -81,9 +81,12 @@ public class GameController : MonoBehaviour
             
             if (tr.currentSprite == 7 || tr.currentSprite == 8)
             {
+                tr.transform.localScale = new Vector3(tr.transform.localScale.x * 0.9f, tr.transform.localScale.y * 0.9f, tr.transform.localScale.z);
                 tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
                 tr.name = Utils.NAME_ENEMY_FOLLOWER;
                 tr.GetComponent<BoxCollider2D>().isTrigger = true;
+                tr.GetComponent<SpriteRenderer>().sortingOrder = 1;
+
 
                 BlockMover mover = tr.gameObject.AddComponent<BlockMover>() as BlockMover;
                 mover.oscilation = (tr.currentSprite == 7 ? new Vector3(3, 0) : new Vector3(0, 3) );
