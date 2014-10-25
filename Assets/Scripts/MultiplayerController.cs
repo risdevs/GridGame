@@ -160,6 +160,7 @@ public class MultiplayerController : MonoBehaviour {
         } else
         {
             GameController.mapToLoad = mapToLoad;
+            GameController.sceneToBack = Application.loadedLevel;
             Application.LoadLevel("Game");
         }
 
