@@ -47,6 +47,9 @@ public class MapEditor : MonoBehaviour
 				tr.tile = new Vector3 (md.x, md.y);
                 tr.currentSprite = md.sprite;
                 tr.transform.parent = mapRoot.transform;
+
+				int xy = ((int)md.y) * GridRendering.COLS + ((int)md.x);
+				tiles[xy] = tr;
             }
         }
 	}
