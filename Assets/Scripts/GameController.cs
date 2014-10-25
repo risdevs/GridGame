@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour
 {
 	public TileRenderer tileRenderer;
 	public GameObject mapRoot;
+	public GameObject player;
 
     // Use this for initialization
     void Start()
@@ -38,6 +39,12 @@ public class GameController : MonoBehaviour
 				tr.tile = new Vector3 (md.x, md.y);
 				tr.currentSprite = md.sprite;
 				tr.transform.parent = mapRoot.transform;
+
+				if (tr.currentSprite == 3)
+				{
+					BlockFollower follower = tr.gameObject.AddComponent("BlockFollower") as BlockFollower;
+					follower.target = player;
+				}
 			}
 		}
 	}

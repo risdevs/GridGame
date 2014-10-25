@@ -19,12 +19,15 @@ public class BlockFollower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		gridRendering.WorldToTile (target.transform.position);
+		//gridRendering.WorldToTile (target.transform.position);
+		targetPosition = target.transform.position;
+		UpdatePosition ();
+
     }
 
     void UpdatePosition()
     {
-        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 0.5f);
     }
 
     public bool hasReachedDestination()
