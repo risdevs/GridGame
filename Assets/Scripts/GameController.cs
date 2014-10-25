@@ -17,9 +17,22 @@ public class GameController : MonoBehaviour
     public UnityEngine.UI.Button b;
     private CharacterController2D controller;
 
+	public UnityEngine.UI.Text diesText;
+
+	public static int numDies = 0;
+	public static int lastLevel = 0;
+	public bool heroIsDead = false;
+
     // Use this for initialization
     void Start()
     {
+
+		GameController.lastLevel = Application.loadedLevel;
+		this.diesText.text = "Times Dead x " + GameController.numDies;
+
+		this.heroIsDead = false;
+
+
         controller = player.GetComponent<CharacterController2D>();
         controller.onTriggerEnterEvent += onTriggerEnterEvent;
         controller.onTriggerExitEvent += onTriggerExitEvent;
@@ -107,6 +120,7 @@ public class GameController : MonoBehaviour
             tr.transform.parent = mapRoot.transform;
         }
         
+	
     }
     
     // Update is called once per frame
@@ -172,8 +186,14 @@ public class GameController : MonoBehaviour
     
     IEnumerator YouDie()
     {
+		this.heroIsDead = true;
+		GameController.numDies = GameController.numDies + 1;
+	
         yield return new WaitForSeconds(1.5f);
         Application.LoadLevel(Application.loadedLevel);
+
+
+
     }
 
     public void LoadScene(string scene)

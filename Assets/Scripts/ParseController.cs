@@ -87,8 +87,8 @@ public class ParseController : ParseInitializeBehaviour
         {
             if (this.parseObject == null)
             {
-                if (this.Author == null) {
-                    return "Single Player " + this.GetNumber();
+                if (this.Author == null || Author == "") {
+                    return "LEVEL - " + this.GetNumber();
                 } else {
                     return "Create New Map (" + this.GetNumber() + ")";
                 }

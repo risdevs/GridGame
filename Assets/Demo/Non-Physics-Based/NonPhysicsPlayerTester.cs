@@ -20,7 +20,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 	private RaycastHit2D _lastControllerColliderHit;
 	private Vector3 _velocity;
   
-
+	public GameController gameController;
     
     bool RightPressed = false;
     bool LeftPressed = false;
@@ -99,6 +99,15 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 	// the Update loop contains a very simple example of moving the character around and controlling the animation
 	void Update()
      {
+		if (this.gameController != null) {
+						//Debug.Log ("Hero is dead = " + this.gameController.heroIsDead);
+				if (this.gameController.heroIsDead)	{
+				Debug.Log ("Hero is dead = " + this.gameController.heroIsDead);
+				return;
+			}
+				}
+
+		//Debug.Log ("Hero is dead = " + this.gameController);
 
         RightPressed = Input.GetKey(KeyCode.RightArrow);
         LeftPressed = Input.GetKey(KeyCode.LeftArrow);
