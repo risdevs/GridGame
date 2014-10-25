@@ -99,7 +99,7 @@ public class ParseController : ParseInitializeBehaviour
         }
 
         public bool HasBeenCompleted() {
-            return ParseController.HasCompletedLevel(this.Author, this.Number);
+            return ParseController.HasCompletedLevel(this.AuthorId, this.Number);
         }
 
 
@@ -114,20 +114,22 @@ public class ParseController : ParseInitializeBehaviour
 
 
 
-    public static bool HasCompletedLevel(string author, int level)
+    public static bool HasCompletedLevel(string authorId, int level)
     {
-        if (author == null)
-            author = "";
+        if (authorId == null)
+            authorId = "";
         var levels = GetCompletedLevels();
         foreach (object l in levels)
         {
             List<object> lobj = (List<object>)l;
-            var lauthor = lobj [0].ToString();
+            var lauthorid = lobj [0].ToString();
             var lnumber = int.Parse(lobj [1].ToString());
-            if (lauthor == author && level == lnumber) {
+            Debug.Log("COMPLETED LEVEL [" + lauthorid + ":" + lnumber + "]");
+            if (lauthorid == authorId && level == lnumber) {
                 return true;
             }
         }
+        Debug.Log("COMPLETED LEVEL FALSE");
         return false;
 
     }
@@ -137,15 +139,17 @@ public class ParseController : ParseInitializeBehaviour
         return ParseUser.CurrentUser.ContainsKey("levels") ? ParseUser.CurrentUser.Get<List<object>>("levels") : new List<object>();
     }
     
-    public static void CompleteLevel(string author, int level)
+    public static void CompleteLevel(MapEntity map)
     {
-        if (author == null)
-            author = "";
-        if (!HasCompletedLevel(author, level))
+        if (map.parseObject == null && map.AuthorId != null && map.AuthorId != "") // level que está en edición!
+            return;
+
+        if (!HasCompletedLevel(map.AuthorId, map.Number))
         {
+            Debug.Log("COMPLETE LEVEL " + map.AuthorId + " " + map.Number);
             var user = ParseUser.CurrentUser;
             var levels = GetCompletedLevels();
-            levels.Add(new List<object>(){author, level});
+            levels.Add(new List<object>(){map.AuthorId != null ? map.AuthorId : "", map.Number});
             user ["levels"] = levels;
             Debug.Log("BEFORE SAVE");
 
@@ -154,9 +158,9 @@ public class ParseController : ParseInitializeBehaviour
             foreach (object l in levels)
             {
                 List<object> lobj = (List<object>)l;
-                var lauthor = lobj [0].ToString();
+                var lauthorid = lobj [0].ToString();
                 var lnumber = int.Parse(lobj [1].ToString());
-                if (lauthor == null || lauthor == "") {
+                if (lauthorid == null || lauthorid == "") {
                     scoresingle += SCORE_PER_SP_LEVEL;
                 } else {
                     scoremulti += SCORE_PER_SP_LEVEL;
@@ -223,6 +227,14 @@ public class ParseController : ParseInitializeBehaviour
                     Password = "socialpoint",
                 };
                 user.SignUpAsync();
+            } else {
+                user.FetchAsync().ContinueWith(t => {
+                    if (t.IsFaulted) {
+                        Debug.Log("USER FETCH FAULTED");
+                    } else {
+                        Debug.Log("USER FETCH OK! " + t.IsCompleted);
+                    }
+                });;
             }
             Debug.Log("User Name: " + user.Username);
             Debug.Log("User ObjectId: " + user.ObjectId);
