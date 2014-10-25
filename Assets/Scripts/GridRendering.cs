@@ -29,6 +29,8 @@ public class GridRendering : MonoBehaviour
 
 		yEnd *= 0.8f;
 		yStart = yEnd - ((ROWS) * tileSize);
+
+        Debug.Log("GridRendering tileSize:" + tileSize);
 	}
 
 	void CreateLineMaterial ()

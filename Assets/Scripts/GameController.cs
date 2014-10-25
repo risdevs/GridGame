@@ -7,6 +7,7 @@ using System.IO;
 
 public class GameController : MonoBehaviour
 {
+    private static float DEFAULT_TILE_SIZE = 1.125731f;
     public static ParseController.MapEntity mapToLoad = null;
     public static int sceneToBack = -1;
 
@@ -35,6 +36,12 @@ public class GameController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        GridRendering rendering = Camera.main.GetComponent<GridRendering> ();
+        Debug.Log("TileSize:" + rendering.tileSize);
+        Debug.Log("LocalScale:" + player.transform.localScale);
+        player.transform.localScale += new Vector3(rendering.tileSize / DEFAULT_TILE_SIZE, rendering.tileSize / DEFAULT_TILE_SIZE);
+        Debug.Log("LocalScale:" + player.transform.localScale);
+        player.GetComponent<NonPhysicsPlayerTester>().jumpHeight += rendering.tileSize / DEFAULT_TILE_SIZE;
 
 		GameController.lastLevel = Application.loadedLevel;
 		this.diesText.text = "Times Dead x " + GameController.numDies;
