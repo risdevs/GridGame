@@ -24,6 +24,8 @@ public class MultiplayerController : MonoBehaviour {
     public UnityEngine.UI.Image flag2;
     public UnityEngine.UI.Image flag3;
 
+    public UnityEngine.UI.Text scoreText;
+
     int numButtonsPerPage=3;
 
 	public static string mode;
@@ -41,10 +43,15 @@ public class MultiplayerController : MonoBehaviour {
 
         mapList = new List<ParseController.MapEntity>();
         RefreshButtons();
-        if (mode=="multiplayer" || mode == "mapeditor") 
+        if (mode == "multiplayer" || mode == "mapeditor") 
             StartCoroutine("LoadMaps");
-		else if (mode == "singleplayer") 
+        else if (mode == "singleplayer")
+        {
             LoadSinglePlayerMaps();
+            scoreText.text = "SCORE: " + ParseController.GetScore();
+        }
+
+
 	}
 	
 
@@ -61,7 +68,9 @@ public class MultiplayerController : MonoBehaviour {
 
     void LoadSinglePlayerMaps() {
         mapList = new List<ParseController.MapEntity>();
-        mapList.Add(new ParseController.MapEntity(1,new int[,]{{7,5,0},{8,5,0},{10,5,0},{11,5,0},{12,5,0},{4,6,0},{5,6,0},{12,6,0},{4,7,0},{12,7,0},{4,8,0},{12,8,0},{4,10,0},{5,11,0},{6,12,0},{7,12,0},{7,13,0}}));
+        mapList.Add(new ParseController.MapEntity(1,new int[,]
+             {{0,0,4},{1,0,4},{2,0,4},{3,0,4},{4,0,4},{5,0,4},{6,0,4},{7,0,4},{8,0,4},{9,0,4},{10,0,4},{11,0,4},{12,0,4},{13,0,4},{14,0,4},{15,0,4},{16,0,4},{17,0,4},{18,0,4},{19,0,4},{0,1,4},{5,1,1},{6,1,1},{7,1,1},{8,1,1},{9,1,1},{10,1,1},{19,1,5},{6,2,1},{7,2,1},{8,2,1},{9,2,1},{10,2,1},{7,3,1},{8,3,1},{9,3,1},{14,3,2},{17,3,2},{18,3,2},{19,3,2},{15,6,3},{4,11,3}}
+        ));
 
         mapList.Add(new ParseController.MapEntity(2,new int[,]
 		      {{11,3,0},{12,3,0},{11,4,0},{12,4,0},{13,4,0},{10,5,0},{13,5,0},{9,6,0},{14,6,0},{9,7,0},{14,7,0},{9,8,0},{10,8,0},{11,8,0},{12,8,0},{13,8,0},{10,9,0}})
@@ -103,9 +112,8 @@ public class MultiplayerController : MonoBehaviour {
                 SetMap(i, null);
             }
         }
-        prevButton.enabled = numPage < 0;
+        prevButton.enabled = numPage > 0;
         nextButton.enabled = (numPage + 1) * numButtonsPerPage < mapList.Count;
-        nextButton.enabled = true;
     }
 
    
