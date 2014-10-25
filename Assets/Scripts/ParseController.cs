@@ -15,10 +15,11 @@ public class ParseController : ParseInitializeBehaviour
         public string AuthorId;
 
         // new map
-        public MapEntity(int Number)
+        public MapEntity(int Number, string userName)
         {
             parseObject = new ParseObject("MapBytes");
             this.Number = Number;
+            this.Author = userName;
         }
 
         // create from spm
@@ -67,7 +68,8 @@ public class ParseController : ParseInitializeBehaviour
             parseObject ["map"] = list;
             parseObject ["author"] = ParseUser.CurrentUser.Username;
             parseObject ["authorId"] = ParseUser.CurrentUser.ObjectId;
-            //TODO: parseObject["mapNumber"] = ??
+            parseObject ["mapNumber"] = this.Number;
+            Debug.Log("SAVE");
             parseObject.SaveAsync();
         }
 
@@ -167,7 +169,7 @@ public class ParseController : ParseInitializeBehaviour
                             result.Add(mapsDict [i]);
                         } else
                         {
-                            result.Add(new MapEntity(i));
+                            result.Add(new MapEntity(i, ParseUser.CurrentUser.Username));
                         }
                     }
                 } 

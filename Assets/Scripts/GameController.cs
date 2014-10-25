@@ -18,11 +18,7 @@ public class GameController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        if (mapToLoad == null)
-        {
-            Debug.Log("NULL");
-            mapToLoad = new ParseController.MapEntity(1);
-        }
+
         foreach (ParseController.MapTile t in mapToLoad.tiles) {
             TileRenderer tr = (TileRenderer) Instantiate (tileRenderer);
             tr.tile = new Vector3 (t.x, t.y);
