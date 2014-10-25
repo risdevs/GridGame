@@ -47,20 +47,7 @@ public class MapEditor : MonoBehaviour
 			}
 			Debug.Log ("LOAD LEVEL START");
 			mapObject = t.Result;
-		});
-
-
-        //Create end flag
-        TileRenderer tr = (TileRenderer) Instantiate (tilePrefab);
-        tr.tile = new Vector3 (GridRendering.COLS - 1, 1);
-        tr.currentSprite = 4;
-        tr.transform.parent = mapRoot.transform;
-        tr.gameObject.name = Utils.NAME_END_FLAG;
-        tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
-        tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
-
-        int xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
-        tiles[xy] = tr;
+   		});
 	}
 
 	// Update is called once per frame
@@ -96,12 +83,68 @@ public class MapEditor : MonoBehaviour
                 {
                     DeleteTile(x, y);
                 }
-
 				tiles[xy] = tr;
 			}
-			mapLoaded = true;
+            
+            SetupLevel();
+            mapLoaded = true;
 		}
 	}
+
+    private void SetupLevel()
+    {
+        TileRenderer tr;
+        int xy;
+        /*
+        for (int i = 0; i < GridRendering.COLS; i++)
+        {
+            tr = (TileRenderer) Instantiate (tilePrefab);
+            tr.tile = new Vector3 (i,-1);
+            tr.currentSprite = 4;
+            tr.transform.parent = mapRoot.transform;
+            tr.gameObject.name = Utils.NAME_TILE_DEAD;
+            tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
+            tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+
+
+
+            
+            tr = (TileRenderer) Instantiate (tilePrefab);
+            tr.tile = new Vector3 (i,GridRendering.ROWS);
+            tr.currentSprite = 4;
+            tr.transform.parent = mapRoot.transform;
+        }
+
+        for (int i = 0; i < GridRendering.ROWS; i++)
+        {
+            tr = (TileRenderer) Instantiate (tilePrefab);
+            tr.tile = new Vector3 (-1,i);
+            tr.currentSprite = 4;
+            tr.transform.parent = mapRoot.transform;
+
+
+            tr = (TileRenderer) Instantiate (tilePrefab);
+            tr.tile = new Vector3 (GridRendering.COLS, i);
+            tr.currentSprite = 4;
+            tr.transform.parent = mapRoot.transform;
+        }
+        */
+        //Create end flag
+        tr = (TileRenderer) Instantiate (tilePrefab);
+        tr.tile = new Vector3 (GridRendering.COLS - 1, 1);
+        tr.currentSprite = 4;
+        tr.transform.parent = mapRoot.transform;
+        tr.gameObject.name = Utils.NAME_TILE_END_FLAG;
+        tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
+        tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+        
+        xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
+        if(tiles[xy] != null)
+        {
+            DeleteTile(tr.tile.x, tr.tile.y);
+        }
+        tiles[xy] = tr;
+    }
 	
 	private void BuildTile()
 	{

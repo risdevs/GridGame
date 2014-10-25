@@ -40,5 +40,6 @@ public class TileRenderer : MonoBehaviour
 	private void UpdateSpriteScale()
 	{
 		transform.localScale = scale;
+        (collider2D as BoxCollider2D).size = spriteRenderer.bounds.size;
 	}
 }
