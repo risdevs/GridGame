@@ -20,16 +20,16 @@ public class SinglePlayerMenu : MonoBehaviour
         //UnityEngine.UI.Text a = level1.GetComponentInChildren<UnityEngine.UI.Text> ();
         //a.text = "Level 4";
 
-        levels.Add(new ParseController.MapEntity(new int[,]
-            {{1,2,1},{1,6,2}}
+        levels.Add(new ParseController.MapEntity("",new int[,]
+            {{1,2,0},{1,6,0}}
         ));
 
-        levels.Add(new ParseController.MapEntity(new int[,]
-            {{1,2,1},{1,2,2}}
+		levels.Add(new ParseController.MapEntity("",new int[,]
+            {{1,2,1},{1,2,1}}
         ));
 
-        levels.Add(new ParseController.MapEntity(new int[,]
-            {{1,2,1},{1,2,2}}
+        levels.Add(new ParseController.MapEntity("",new int[,]
+            {{1,2,2},{1,2,2}}
         ));
 
         pageCounter = 0;
