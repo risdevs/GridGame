@@ -119,11 +119,8 @@ public class MapEditor : MonoBehaviour
 	}
 
 	public void printButtonAction() {
-		string strinMap = "listLevelsSPM.Add(new ParseController.MapEntity(77777,new int[,]{";
 
-		strinMap = strinMap +convertMapToString()+"));";
-		
-		Debug.Log("CODIGO A COPIAR >>>>     " + strinMap);
+        Debug.Log("CODIGO A COPIAR >>>>     " + convertMapToString());
 
 	}
 

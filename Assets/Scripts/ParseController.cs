@@ -6,6 +6,8 @@ using Parse;
 public class ParseController : ParseInitializeBehaviour
 {
 
+    static int SCORE_PER_SP_LEVEL = 100;
+
     public class MapEntity
     {
         public ParseObject parseObject;
@@ -131,6 +133,12 @@ public class ParseController : ParseInitializeBehaviour
                     Debug.Log("OK");
                 }
             });
+            var d = new Dictionary<int, bool>();
+            foreach (var l in GetCompletedSinglePlayerLevels())
+            {
+                d[int.Parse(l.ToString())] = true;
+            }
+            user ["spscore"] = d.Keys.Count * SCORE_PER_SP_LEVEL;
         }
     }
     
@@ -140,8 +148,12 @@ public class ParseController : ParseInitializeBehaviour
         user.SaveAsync();
     }
 
+    public static int GetScore()
+    {
+        return ParseUser.CurrentUser.ContainsKey("spscore") ? int.Parse(ParseUser.CurrentUser.Get<object>("spscore").ToString()) : 0;
+    }
 
-
+            
     public override void Awake()
     {
         base.applicationID = "2QWerPx74sTKazgf92SYJuaMMP7jpOy0lB6fJ3NW";
@@ -170,6 +182,8 @@ public class ParseController : ParseInitializeBehaviour
         }
     }
 
+
+
     public class ListMapOperation
     {
         public List<MapEntity> result = new List<MapEntity>();
@@ -180,7 +194,8 @@ public class ParseController : ParseInitializeBehaviour
             var q = ParseObject.GetQuery("MapBytes");
             if (currentuser)
             {
-                q.WhereEqualTo("authorId", ParseUser.CurrentUser.ObjectId);
+                Debug.Log("CURRENT USER ONLY");
+                q = q.WhereEqualTo("authorId", ParseUser.CurrentUser.ObjectId);
             }
             q.OrderByDescending("timesPlayed")
                 .FindAsync().ContinueWith(t => {
