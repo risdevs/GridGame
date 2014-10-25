@@ -23,10 +23,20 @@ public class GameController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+<<<<<<< Updated upstream
+=======
+        if (mapToLoad == null)
+        {
+            Debug.Log("NULL");
+            mapToLoad = new ParseController.MapEntity(1);
+        }
+
+
         controller = player.GetComponent<CharacterController2D>();
         controller.onTriggerEnterEvent += onTriggerEnterEvent;
         controller.onTriggerExitEvent += onTriggerExitEvent;
 
+>>>>>>> Stashed changes
 
         foreach (ParseController.MapTile t in mapToLoad.tiles) {
             TileRenderer tr = (TileRenderer) Instantiate (tileRenderer);
@@ -82,31 +92,11 @@ public class GameController : MonoBehaviour
     void onTriggerEnterEvent( Collider2D col )
     {
         Debug.Log( "My onTriggerEnterEvent: " + col.gameObject.name );
-
-        if (col.gameObject.name == Utils.NAME_TILE_END_FLAG)
-        {
-            Debug.Log("YOU WON");
-            gameText.text = "YOU WIN";
-            gameText.enabled = true;
-
-            StartCoroutine(ReturnToMain());
-        }
     }
     
     
     void onTriggerExitEvent( Collider2D col )
     {
         Debug.Log("My onTriggerExitEvent: " + col.gameObject.name );
-    }
-
-    IEnumerator ReturnToMain()
-    {
-        yield return new WaitForSeconds(1.5f);
-        Application.LoadLevel("Main");
-    }
-
-    public void LoadScene(string scene)
-    {
-        Application.LoadLevel(scene);
     }
 }

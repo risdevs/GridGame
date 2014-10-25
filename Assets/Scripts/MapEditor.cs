@@ -145,7 +145,7 @@ public class MapEditor : MonoBehaviour
         //Create end flag
         tr = (TileRenderer) Instantiate (tilePrefab);
         tr.tile = new Vector3 (GridRendering.COLS - 1, 1);
-        tr.currentSprite = 4;
+        tr.currentSprite = 0;
         tr.transform.parent = mapRoot.transform;
         tr.gameObject.name = Utils.NAME_TILE_END_FLAG;
         tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
