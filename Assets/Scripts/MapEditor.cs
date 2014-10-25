@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using Parse;
 
 public class MapEditor : MonoBehaviour
 {
@@ -22,6 +23,11 @@ public class MapEditor : MonoBehaviour
 
 	private TileRenderer[] tiles;
 
+
+	private ParseObject mapObject;
+
+	private bool mapLoaded = false;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -33,25 +39,16 @@ public class MapEditor : MonoBehaviour
 	
 	private void LoadLevel()
 	{
-		if (File.Exists (Utils.GetSaveDataFile()))
-		{
-			BinaryFormatter bf = new BinaryFormatter();
-			FileStream file = File.Open (Utils.GetSaveDataFile(), FileMode.Open);
-			ArrayList list = (ArrayList) bf.Deserialize(file);
-			file.Close();
-			
-			foreach (MapData md in list)
-			{
-				Debug.Log("MD pos:" + md.position + " sprite:" + md.sprite);
-				TileRenderer tr = (TileRenderer) Instantiate (tilePrefab);
-				tr.tile = new Vector3 (md.x, md.y);
-                tr.currentSprite = md.sprite;
-                tr.transform.parent = mapRoot.transform;
 
-				int xy = ((int)md.y) * GridRendering.COLS + ((int)md.x);
-				tiles[xy] = tr;
-            }
-        }
+		Debug.Log ("LOAD LEVEL");
+		ParseObject.GetQuery ("MapBytes").GetAsync ("z820YEC0OE").ContinueWith (t => {
+			if (t.IsFaulted) {
+				Debug.Log("ERROR");
+			}
+			Debug.Log ("LOAD LEVEL START");
+			mapObject = t.Result;
+		});
+
 	}
 
 	// Update is called once per frame
@@ -66,6 +63,25 @@ public class MapEditor : MonoBehaviour
 			else{
 				RemoveTile();
 			}
+		}
+
+		if (mapObject != null && !mapLoaded) {
+			foreach (object tileobj in mapObject.Get<List<object>>("map")) {
+				List<object> tile = (List<object>)tileobj;
+				Debug.Log ("LOAD LEVEL TILE "  + tile[0].ToString());
+				float x = float.Parse(tile[0].ToString());
+				float y = float.Parse(tile[1].ToString());
+				int sprite = int.Parse(tile[2].ToString());
+				Debug.Log ("LOAD LEVEL TILE " + x + " " + y + " " + sprite);
+				//TODO: SERGI ESTO NO FUNCIONA DESDE ESTE THREAD
+				TileRenderer tr = (TileRenderer) Instantiate (tilePrefab);
+				tr.tile = new Vector3 (x, y);
+				tr.currentSprite = sprite;
+				tr.transform.parent = mapRoot.transform;
+				int xy = ((int)y) * GridRendering.COLS + ((int)x);
+				tiles[xy] = tr;
+			}
+			mapLoaded = true;
 		}
 	}
 	
@@ -117,20 +133,19 @@ public class MapEditor : MonoBehaviour
 
 	public void SaveMap()
 	{
-		System.Collections.ArrayList list = new ArrayList ();
+		List<List<float>> list = new List<List<float>> ();
 
 		for(int i = 0; i < tiles.Length; i++)
 		{
 			if(tiles[i] != null)
 			{
-				list.Add(new MapData(tiles[i].tile, tiles[i].currentSprite));
+				list.Add(new List<float>(){tiles[i].tile.x, tiles[i].tile.y, tiles[i].currentSprite});
 			}
 		}
 
-		BinaryFormatter bf = new BinaryFormatter();
-		FileStream file = File.Create (Utils.GetSaveDataFile());
-		bf.Serialize (file, list);
-		file.Close();
+		mapObject ["map"] = list;
+		mapObject.SaveAsync ();
+
 	}
 
 	public void SwitchMode(UnityEngine.UI.Button b)
