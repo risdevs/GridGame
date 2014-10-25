@@ -84,7 +84,7 @@ public class ParseController : ParseInitializeBehaviour
         {
             if (this.parseObject == null)
             {
-                return "Single Player " + this.GetNumber();
+                return "LEVEL - " + this.GetNumber();
             } else
             {
                 return this.Author + " " + this.GetNumber();
