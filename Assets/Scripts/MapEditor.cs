@@ -228,4 +228,14 @@ public class MapEditor : MonoBehaviour
 	{
 		Application.LoadLevel("Main");
 	}
+
+    public void PlayLevel()
+    {
+        // TODO: ANDRES obrir el joc amb el mapa que estem editant
+    }
+
+    public void PrintMatrix()
+    {
+        // TODO: ANDRES mostar per pantalla o per debug el array
+    }
 }
