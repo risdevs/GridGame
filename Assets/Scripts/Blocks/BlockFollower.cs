@@ -25,7 +25,7 @@ public class BlockFollower : MonoBehaviour
 
     void UpdatePosition()
     {
-        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 0.5f);
+        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 0.25f);
     }
 
     public bool hasReachedDestination()
