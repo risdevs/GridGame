@@ -53,7 +53,7 @@ public class MultiplayerController : MonoBehaviour {
 		listMaps.run();
 		while (!listMaps.IsCompleted) yield return null;
 
-		loadAllMaps ();
+		countNumMaps ();
 		loadMapButtons ();
 	}
 
@@ -70,14 +70,14 @@ public class MultiplayerController : MonoBehaviour {
 		                                         {{1,2,1},{1,2,2}}
 		));
 
-		loadAllMaps ();
+		countNumMaps ();
 		loadMapButtons ();
 	}
 
 	void initMapsMapEditor() {
 	}
 
-	void loadAllMaps() {
+	void countNumMaps() {
 		numMaps = 0;
 		if (mode == "multiplayer") {
 				foreach (ParseController.MapEntity map in listMaps.result) {
