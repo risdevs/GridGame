@@ -33,8 +33,8 @@ public class PhysicsPlayerTester : MonoBehaviour
 
 		// listen to some events for illustration purposes
 		_controller.onControllerCollidedEvent += onControllerCollider;
-		_controller.onTriggerEnterEvent += onTriggerEnterEvent;
-		_controller.onTriggerExitEvent += onTriggerExitEvent;
+		//_controller.onTriggerEnterEvent += onTriggerEnterEvent;
+		//_controller.onTriggerExitEvent += onTriggerExitEvent;
 	}
 
 

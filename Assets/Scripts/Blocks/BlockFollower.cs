@@ -5,6 +5,8 @@ public class BlockFollower : MonoBehaviour
 {
     public GameObject target;
     private Vector3 targetPosition;
+    private Vector3 direction;
+    public float speed = 0.040f;
 
 
     // Use this for initialization
@@ -20,12 +22,14 @@ public class BlockFollower : MonoBehaviour
     {
         //gridRendering.WorldToTile (target.transform.position);
         targetPosition = target.transform.position;
+        direction = Vector3.Normalize(targetPosition - transform.position);
+
         UpdatePosition();
     }
 
     void UpdatePosition()
     {
-        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * 0.5f);
+        transform.position = transform.position + direction * speed;
     }
 
     public bool hasReachedDestination()
