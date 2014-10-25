@@ -66,9 +66,7 @@ public class RankingController : MonoBehaviour
 
     public void UpdateName()
     {
-        ParseUser user = ParseUser.CurrentUser;
-        user.Username = NameInput.text.text;
-        user.SaveAsync();
+        ParseController.RenameUser(NameInput.text.text);
     }
     
     // Update is called once per frame

@@ -187,6 +187,19 @@ public class ParseController : ParseInitializeBehaviour
     {
         return ParseUser.CurrentUser.ContainsKey("spscore") ? int.Parse(ParseUser.CurrentUser.Get<object>("spscore").ToString()) : 0;
     }
+
+    public static void RenameUser(string name) {
+        ParseUser.CurrentUser.Username = name;
+        ParseUser.CurrentUser.SaveAsync();
+        ParseObject.GetQuery("MapBytes").WhereEqualTo("authorId", ParseUser.CurrentUser.ObjectId).FindAsync().ContinueWith(t => {
+           foreach (ParseObject obj in t.Result)
+           {
+                obj ["author"] = ParseUser.CurrentUser.Username;
+                obj.SaveAsync();
+            }
+        });
+
+    }
          
     public override void Awake()
     {
