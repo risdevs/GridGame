@@ -99,7 +99,7 @@ public class GameController : MonoBehaviour
             gameText.color = new Color(219, 24, 24, 255);
             gameText.enabled = true;
             
-            StartCoroutine(ReturnToMain());
+            StartCoroutine(Reload());
         }
     }
     
@@ -107,11 +107,17 @@ public class GameController : MonoBehaviour
     {
         Debug.Log("My onTriggerExitEvent: " + col.gameObject.name);
     }
-
+    
     IEnumerator ReturnToMain()
     {
         yield return new WaitForSeconds(1.5f);
         Application.LoadLevel("Main");
+    }
+    
+    IEnumerator Reload()
+    {
+        yield return new WaitForSeconds(1.5f);
+        Application.LoadLevel(Application.loadedLevel);
     }
 
     public void LoadScene(string scene)
