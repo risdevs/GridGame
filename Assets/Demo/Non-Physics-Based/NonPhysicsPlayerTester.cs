@@ -112,15 +112,9 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 	void Update()
      {
 
-		if( Input.GetKey( KeyCode.RightArrow )) {
-			RightPressed = true;
-		}
-		if (Input.GetKey( KeyCode.LeftArrow )) {
-			LeftPressed = true;
-		}
-		if (Input.GetKey( KeyCode.UpArrow )) {
-			JumpPressed = true;
-		}
+        RightPressed = Input.GetKey(KeyCode.RightArrow);
+        LeftPressed = Input.GetKey(KeyCode.LeftArrow);
+        JumpPressed = Input.GetKey(KeyCode.UpArrow);
 
 		List<GameObject> hitObjects = GetHitObjects ();
 		
