@@ -89,7 +89,7 @@ public class GameController : MonoBehaviour
             gameText.color = new Color(24, 219, 24, 255);
             gameText.enabled = true;
 
-            StartCoroutine(ReturnToMain());
+            StartCoroutine(YouWin());
         }
 
         if (name == Utils.NAME_TILE_DEAD || name == Utils.NAME_ENEMY_FOLLOWER || name == Utils.NAME_ENEMY_FIREBALL)
@@ -99,7 +99,7 @@ public class GameController : MonoBehaviour
             gameText.color = new Color(219, 24, 24, 255);
             gameText.enabled = true;
             
-            StartCoroutine(Reload());
+            StartCoroutine(YouDie());
         }
     }
     
@@ -108,13 +108,13 @@ public class GameController : MonoBehaviour
         Debug.Log("My onTriggerExitEvent: " + col.gameObject.name);
     }
     
-    IEnumerator ReturnToMain()
+    IEnumerator YouWin()
     {
         yield return new WaitForSeconds(1.5f);
         Application.LoadLevel("Main");
     }
     
-    IEnumerator Reload()
+    IEnumerator YouDie()
     {
         yield return new WaitForSeconds(1.5f);
         Application.LoadLevel(Application.loadedLevel);
