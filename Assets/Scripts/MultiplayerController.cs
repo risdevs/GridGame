@@ -58,6 +58,10 @@ public class MultiplayerController : MonoBehaviour {
 	}
 
 	void initMapsSPM () {
+
+		listLevelsSPM.Add(new ParseController.MapEntity("MAP_NAME_HERE",new int[,]{{11,3,0},{12,3,0},{11,4,0},{12,4,0},{13,4,0},{10,5,0},{13,5,0},{9,6,0},{14,6,0},{9,7,0},{14,7,0},{9,8,0},{10,8,0},{11,8,0},{12,8,0},{13,8,0},{10,9,0}}));
+
+
 		listLevelsSPM.Add(new ParseController.MapEntity("hahaha",new int[,]
 		                                   {{1,2,1},{1,6,2}}
 		));
@@ -69,6 +73,7 @@ public class MultiplayerController : MonoBehaviour {
 		listLevelsSPM.Add(new ParseController.MapEntity("xxxxx",new int[,]
 		                                         {{1,2,1},{1,2,2}}
 		));
+
 
 		countNumMaps ();
 		loadMapButtons ();

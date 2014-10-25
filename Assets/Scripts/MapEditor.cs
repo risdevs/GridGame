@@ -13,6 +13,11 @@ public class MapEditor : MonoBehaviour
 		BUILD,
 		DELETE
 	}
+
+
+	public UnityEngine.UI.Button printButton;
+	public UnityEngine.UI.Button playButton;
+
 	public MODE currentMode;
 
 	public Sprite[] sprites;
@@ -110,6 +115,47 @@ public class MapEditor : MonoBehaviour
 		}
 
 	}
+
+	public void printButtonAction() {
+
+		/*
+		List<List<float>> list = new List<List<float>>();
+		foreach (MapTile t in tiles)
+		{
+			list.Add(new List<float>(){t.x, t.y, t.sprite});
+		}
+		
+		parseObject ["map"] = list;
+		parseObject.SaveAsync();
+		*/
+
+
+		/*
+
+		List<List<float>> list = new List<List<float>>();
+		//String que luego copiaremos para single Player
+		string strinMap = "listLevelsSPM.Add(new ParseController.MapEntity('MAP_NAME_HERE',new int[,]{";
+		
+		foreach (MapTile t in tiles)
+		{
+			list.Add(new List<float>(){t.x, t.y, t.sprite});
+			strinMap = strinMap + "{" + t.x + "," + t.y + "," +  t.sprite + "},";
+		}
+		
+		strinMap = strinMap.Remove(strinMap.Length - 1) + "}));";
+		//parseObject ["map"] = list;
+		//parseObject.SaveAsync();
+*/
+
+	}
+
+	public void playButtonAction(){
+		GameController.mapToLoad = mapEntity;
+		Application.LoadLevel("Game");
+
+	}
+
+
 
     private void SetupLevel()
     {
