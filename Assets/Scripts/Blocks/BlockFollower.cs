@@ -4,26 +4,23 @@ using System.Collections;
 public class BlockFollower : MonoBehaviour
 {
     public GameObject target;
-
-
-	private GridRendering gridRendering;
-	private Vector3 targetPosition;
+    private Vector3 targetPosition;
 
 
     // Use this for initialization
     void Start()
     {
-		gridRendering = Camera.main.GetComponent<GridRendering> ();
-		gameObject.layer = (int)Utils.LAYERS.Triggers;
-		GetComponent<BoxCollider2D> ().isTrigger = true;
+        gameObject.layer = (int)Utils.LAYERS.Triggers;
+        name = Utils.NAME_ENEMY_FOLLOWER;
+        GetComponent<BoxCollider2D>().isTrigger = true;
     }
     
     // Update is called once per frame
     void Update()
     {
-		//gridRendering.WorldToTile (target.transform.position);
-		targetPosition = target.transform.position;
-		UpdatePosition ();
+        //gridRendering.WorldToTile (target.transform.position);
+        targetPosition = target.transform.position;
+        UpdatePosition();
     }
 
     void UpdatePosition()

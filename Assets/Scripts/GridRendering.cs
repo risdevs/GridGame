@@ -15,7 +15,6 @@ public class GridRendering : MonoBehaviour
 
 	void Start ()
 	{
-		Vector3 newPosition = transform.position; 
 		Camera mainCamera = Camera.main;
 		Vector3 cameraPosition = mainCamera.transform.position;
 		
@@ -25,7 +24,6 @@ public class GridRendering : MonoBehaviour
 		
 		float yDist = mainCamera.orthographicSize; 
 		yEnd = cameraPosition.y + yDist;
-		float yMin = cameraPosition.y;
 		
 		tileSize = (xEnd - xStart) / COLS;
 

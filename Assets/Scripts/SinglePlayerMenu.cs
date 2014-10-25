@@ -15,7 +15,7 @@ public class SinglePlayerMenu : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		UnityEngine.UI.Text a = level1.GetComponentInChildren<UnityEngine.UI.Text> ();
+		//UnityEngine.UI.Text a = level1.GetComponentInChildren<UnityEngine.UI.Text> ();
 		//a.text = "Level 4";
 
 		pageCounter = 0;

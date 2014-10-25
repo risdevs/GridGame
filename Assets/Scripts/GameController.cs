@@ -50,7 +50,7 @@ public class GameController : MonoBehaviour
 
 				if (tr.currentSprite == 2)
 				{
-					BlockFireballs fireballs = tr.gameObject.AddComponent("BlockFireballs") as BlockFireballs;
+					tr.gameObject.AddComponent("BlockFireballs");
 				}
 			}
 		}

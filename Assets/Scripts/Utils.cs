@@ -3,6 +3,8 @@ using System.Collections;
 
 public class Utils {
 
+	public static string NAME_ENEMY_FOLLOWER = "FOLLOWER_ENEMY";
+
 	public enum LAYERS
 	{
 		Default = 0,
