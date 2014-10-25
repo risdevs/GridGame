@@ -5,19 +5,14 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.UI;
 using System.IO;
 
-
 public class GameController : MonoBehaviour
 {
-	public TileRenderer tileRenderer;
-	public GameObject mapRoot;
-	public GameObject player;
-
+    public TileRenderer tileRenderer;
+    public GameObject mapRoot;
+    public GameObject player;
     public Text gameText;
-    
     public UnityEngine.UI.Button b;
-
     public static ParseController.MapEntity mapToLoad = null;
-
     private CharacterController2D controller;
 
     // Use this for initialization
@@ -28,11 +23,14 @@ public class GameController : MonoBehaviour
         controller.onTriggerExitEvent += onTriggerExitEvent;
 
 
-        foreach (ParseController.MapTile t in mapToLoad.tiles) {
-            TileRenderer tr = (TileRenderer) Instantiate (tileRenderer);
-            tr.tile = new Vector3 (t.x, t.y);
+        foreach (ParseController.MapTile t in mapToLoad.tiles)
+        {
+            TileRenderer tr = (TileRenderer)Instantiate(tileRenderer);
+            tr.tile = new Vector3(t.x, t.y);
             tr.currentSprite = t.sprite;
             tr.transform.parent = mapRoot.transform;
+
+
             if (tr.currentSprite == 3)
             {
                 BlockFollower follower = tr.gameObject.AddComponent("BlockFollower") as BlockFollower;
@@ -66,37 +64,48 @@ public class GameController : MonoBehaviour
         Debug.Log("clickDown");
     }
 
-	private void LoadBasicLevel()
-	{
-		//Replace for a proper level loading
-		for (int i = 0; i < GridRendering.COLS; i++)
-		{
-			TileRenderer tr = (TileRenderer) Instantiate (tileRenderer);
-			tr.tile = new Vector3 (i, 0);
-            tr.currentSprite = i % 3;
-			tr.transform.parent = mapRoot.transform;
-        }
-	}
-    
-    
-    void onTriggerEnterEvent( Collider2D col )
+    private void LoadBasicLevel()
     {
-        Debug.Log( "My onTriggerEnterEvent: " + col.gameObject.name );
+        //Replace for a proper level loading
+        for (int i = 0; i < GridRendering.COLS; i++)
+        {
+            TileRenderer tr = (TileRenderer)Instantiate(tileRenderer);
+            tr.tile = new Vector3(i, 0);
+            tr.currentSprite = i % 3;
+            tr.transform.parent = mapRoot.transform;
+        }
+    }
+    
+    void onTriggerEnterEvent(Collider2D col)
+    {
+        Debug.Log("My onTriggerEnterEvent: " + col.gameObject.name);
 
-        if (col.gameObject.name == Utils.NAME_TILE_END_FLAG)
+        string name = col.gameObject.name;
+
+        if (name == Utils.NAME_TILE_END_FLAG)
         {
             Debug.Log("YOU WON");
             gameText.text = "YOU WIN";
+            gameText.color = new Color(24, 219, 24, 255);
             gameText.enabled = true;
 
             StartCoroutine(ReturnToMain());
         }
+
+        if (name == Utils.NAME_TILE_DEAD || name == Utils.NAME_ENEMY_FOLLOWER || name == Utils.NAME_ENEMY_FIREBALL)
+        {
+            Debug.Log("YOU DIE");
+            gameText.text = "YOU DIE";
+            gameText.color = new Color(219, 24, 24, 255);
+            gameText.enabled = true;
+            
+            StartCoroutine(ReturnToMain());
+        }
     }
     
-    
-    void onTriggerExitEvent( Collider2D col )
+    void onTriggerExitEvent(Collider2D col)
     {
-        Debug.Log("My onTriggerExitEvent: " + col.gameObject.name );
+        Debug.Log("My onTriggerExitEvent: " + col.gameObject.name);
     }
 
     IEnumerator ReturnToMain()
