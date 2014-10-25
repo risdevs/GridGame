@@ -32,6 +32,7 @@ public class MapEditor : MonoBehaviour
         gridRendering = Camera.main.GetComponent<GridRendering> ();
 		tiles = new TileRenderer[GridRendering.COLS * GridRendering.ROWS];
         StartCoroutine("LoadMap");
+        //SetupLevel();
 	}
 
 
@@ -104,7 +105,7 @@ public class MapEditor : MonoBehaviour
         }
         tiles[xy] = tr;
 
-        /*
+
         for (int i = 0; i < GridRendering.COLS; i++)
         {
             tr = (TileRenderer) Instantiate (tilePrefab);
@@ -137,7 +138,7 @@ public class MapEditor : MonoBehaviour
             tr.currentSprite = 4;
             tr.transform.parent = mapRoot.transform;
         }
-        */
+
     }
 	
 	private void BuildTile()

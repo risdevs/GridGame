@@ -23,10 +23,14 @@ public class TileRenderer : MonoBehaviour
 
 		Bounds b = spriteRenderer.bounds;
 		scale = new Vector3(gridRendering.tileSize / b.size.x, gridRendering.tileSize / b.size.y);
+        Debug.Log("Scale:" + scale);
 
 		UpdateSpriteScale ();
+        /*
         Destroy(GetComponent<BoxCollider2D>());
         gameObject.AddComponent<BoxCollider2D>();
+        */
+        GetComponent<BoxCollider2D>().size = spriteRenderer.bounds.size / scale.x;
 
 		Vector3 v3 = gridRendering.TileToWorld (tile);
 		gameObject.transform.position = v3 + (b.size/2 * scale.x); //new Vector3( b.size.x * scale, b.size.y * scale);
