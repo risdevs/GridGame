@@ -25,6 +25,9 @@ public class NonPhysicsPlayerTester : MonoBehaviour
     bool RightPressed = false;
     bool LeftPressed = false;
     bool JumpPressed = false;
+    bool RightOver = false;
+    bool LeftOver = false;
+    bool JumpOver = false;
     
     void Awake()
 	{
@@ -127,7 +130,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 		if( _controller.isGrounded )
 			_velocity.y = 0;
 
-		if( RightPressed )
+		if( RightPressed || RightOver)
 		{
 			normalizedHorizontalSpeed = 1;
 			if( transform.localScale.x < 0f )
@@ -136,7 +139,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 			if( _controller.isGrounded )
 				_animator.Play( Animator.StringToHash( "Run" ) );
 		}
-		else if( LeftPressed )
+		else if( LeftPressed || LeftOver )
 		{
 			normalizedHorizontalSpeed = -1;
 			if( transform.localScale.x > 0f )
@@ -155,7 +158,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 
 
 		// we can only jump whilst grounded
-		if( _controller.isGrounded && JumpPressed )
+		if( _controller.isGrounded && (JumpPressed || JumpOver))
 		{
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
 			_animator.Play( Animator.StringToHash( "Jump" ) );
@@ -193,18 +196,18 @@ public class NonPhysicsPlayerTester : MonoBehaviour
     
     public void setLeftOver(bool down)
     {
-        LeftPressed = down;
+        LeftOver = down;
     }
     
     
     public void setRightOver(bool down)
     {
-        RightPressed = down;
+        RightOver = down;
     }
     
     
     public void setJumpOver(bool down)
     {
-        JumpPressed = down;
+        JumpOver = down;
     }
 }
