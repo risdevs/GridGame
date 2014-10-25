@@ -101,8 +101,8 @@ public class MapEditor : MonoBehaviour
 
 	}
 
-	public void printButtonAction() {
-		string strinMap = "listLevelsSPM.Add(new ParseController.MapEntity(77777,new int[,]{";
+	public string convertMapToString() {
+		string strinMap = "{";
 		
 		for(int i = 0; i < tiles.Length; i++)
 		{
@@ -112,13 +112,23 @@ public class MapEditor : MonoBehaviour
 			}
 		}
 		
-		strinMap = strinMap.Remove(strinMap.Length - 1) + "}));";
+		strinMap = strinMap.Remove(strinMap.Length - 1) + "}";
+
+		return strinMap;
+		
+	}
+
+	public void printButtonAction() {
+		string strinMap = "listLevelsSPM.Add(new ParseController.MapEntity(77777,new int[,]{";
+
+		strinMap = strinMap +convertMapToString()+"));";
 		
 		Debug.Log("CODIGO A COPIAR >>>>     " + strinMap);
 
 	}
 
 	public void playButtonAction(){
+
 		GameController.mapToLoad = mapEntity;
 		Application.LoadLevel("Game");
 
