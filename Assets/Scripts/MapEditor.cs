@@ -201,17 +201,20 @@ public class MapEditor : MonoBehaviour
         
         Debug.Log("Build tile: " + tile);
 		
-		int xy = ((int)tile.y) * GridRendering.COLS + ((int)tile.x);
 		
-
-		if (tiles [xy] != null)
-        {
-            DeleteTile(tile.x, tile.y);
-        }
 		TileRenderer tr = (TileRenderer)Instantiate(tilePrefab);
 		tr.tile = tile;
 		tr.transform.parent = mapRoot.transform;
 		tr.currentSprite = selectedTile;
+
+        if (tile.x < 0 || tile.x >= GridRendering.COLS || tile.y < 0 || tile.y >= GridRendering.ROWS)
+            return;
+
+        int xy = ((int)tile.y) * GridRendering.COLS + ((int)tile.x);
+        if (tiles [xy] != null)
+        {
+            DeleteTile(tile.x, tile.y);
+        }
         tiles[xy] = tr;
 	}
 	
