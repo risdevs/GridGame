@@ -13,6 +13,11 @@ public class MapEditor : MonoBehaviour
 		BUILD,
 		DELETE
 	}
+
+
+	public UnityEngine.UI.Button printButton;
+	public UnityEngine.UI.Button playButton;
+
 	public MODE currentMode;
 
 	public Sprite[] sprites;
@@ -63,14 +68,16 @@ public class MapEditor : MonoBehaviour
             b = Instantiate(tileButtonPrefab) as Button;
             b.GetComponent<Image>().sprite = sprites[i];
             b.transform.parent = mainCanvas.transform;
-            b.transform.Translate(new Vector3(res.width * 0.05f + (sprites[i].bounds.size.x + 10) * 5 * i, res.height * 0.3f));
-            b.transform.localScale = new Vector3(5,5);
-
+            b.transform.localPosition = new Vector3(50 + (sprites[i].bounds.size.x + 25) * 3 * i - 320, -150);
+            b.transform.localScale = new Vector3(3,3);
 
             int j = i;
+
+            Debug.Log("Adding Button with sprite:" + j);
+
             b.onClick.AddListener (delegate () {
                 Debug.Log("sprite:" + j);
-
+                
                 selectedTile = j;
             });
         }
@@ -93,6 +100,31 @@ public class MapEditor : MonoBehaviour
 		}
 
 	}
+
+	public void printButtonAction() {
+		string strinMap = "listLevelsSPM.Add(new ParseController.MapEntity(77777,new int[,]{";
+		
+		for(int i = 0; i < tiles.Length; i++)
+		{
+			if(tiles[i] != null)
+			{
+				strinMap = strinMap + "{" + tiles[i].tile.x + "," + tiles[i].tile.y + "," + tiles[i].currentSprite + "},";
+			}
+		}
+		
+		strinMap = strinMap.Remove(strinMap.Length - 1) + "}));";
+		
+		Debug.Log("CODIGO A COPIAR >>>>     " + strinMap);
+
+	}
+
+	public void playButtonAction(){
+		GameController.mapToLoad = mapEntity;
+		Application.LoadLevel("Game");
+
+	}
+
+
 
     private void SetupLevel()
     {
@@ -155,10 +187,12 @@ public class MapEditor : MonoBehaviour
 	private void BuildTile()
 	{
 		Vector3 tile = gridRendering.WorldToTile(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-		Debug.Log("tile: " + tile);
 
 		if (tile.x < 0 || tile.y < 0)
 						return;
+
+        
+        Debug.Log("Build tile: " + tile);
 		
 		int xy = ((int)tile.y) * GridRendering.COLS + ((int)tile.x);
 		
@@ -177,10 +211,11 @@ public class MapEditor : MonoBehaviour
 	private void RemoveTile()
 	{
 		Vector3 tile = gridRendering.WorldToTile(Camera.main.ScreenToWorldPoint(Input.mousePosition));
-		Debug.Log("tile: " + tile);
 		
 		if (tile.x < 0 || tile.y < 0)
             return;
+
+        Debug.Log("Remove tile: " + tile);
         
 		int xy = ((int)tile.y) * GridRendering.COLS + ((int)tile.x);
 		
@@ -228,9 +263,8 @@ public class MapEditor : MonoBehaviour
 			currentMode = MODE.BUILD;
 			b.GetComponentInChildren<UnityEngine.UI.Text> ().text = "BUILD";
 		}
-	}
-
-	public void BackToMainMenu()
+  	}
+    public void BackToMainMenu()
 	{
 		Application.LoadLevel("Main");
 	}

@@ -23,7 +23,6 @@ public class TileRenderer : MonoBehaviour
 
 		Bounds b = spriteRenderer.bounds;
 		scale = new Vector3(gridRendering.tileSize / b.size.x, gridRendering.tileSize / b.size.y);
-        Debug.Log("Scale:" + scale);
 
 		UpdateSpriteScale ();
         /*
