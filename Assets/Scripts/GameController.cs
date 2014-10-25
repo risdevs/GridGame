@@ -163,6 +163,7 @@ public class GameController : MonoBehaviour
     
     IEnumerator YouWin()
     {
+        ParseController.CompleteSinglePlayerLevel(mapToLoad.Number);
         yield return new WaitForSeconds(1.5f);
         Application.LoadLevel("Main");
     }

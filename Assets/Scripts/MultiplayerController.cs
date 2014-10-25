@@ -15,187 +15,112 @@ public class MultiplayerController : MonoBehaviour {
 	public UnityEngine.UI.Button backButton;
 
 	int numPage = 0;
-	int numMaxPages = 0;
-	int numMaps = 0;
 
 	ParseController.MapEntity map1;
 	ParseController.MapEntity map2;
 	ParseController.MapEntity map3;
 
-	int numButtonsPerPage=3;
+    public UnityEngine.UI.Image flag1;
+    public UnityEngine.UI.Image flag2;
+    public UnityEngine.UI.Image flag3;
+
+    int numButtonsPerPage=3;
 
 	public static string mode;
-
-	ParseController.ListMapOperation listMaps;
-	
-	public List<ParseController.MapEntity> listLevelsSPM = new List<ParseController.MapEntity>();
+    	
+    public List<ParseController.MapEntity> mapList;
 
 	// Use this for initialization
 	void Start () {
-		hideAllMapButtons ();
+
+        //ParseController.CompleteSinglePlayerLevel(0);
 
 		//mode = "singleplayer";
 
 		Debug.Log ("mode list maps " + mode);
 
-
-		if (mode=="multiplayer") StartCoroutine("LoadAllMaps");
-		else if (mode == "singleplayer") initMapsSPM();
-        else if (mode=="mapeditor") StartCoroutine("initMapsMapEditor");
-
+        mapList = new List<ParseController.MapEntity>();
+        RefreshButtons();
+        if (mode=="multiplayer" || mode == "mapeditor") 
+            StartCoroutine("LoadMaps");
+		else if (mode == "singleplayer") 
+            LoadSinglePlayerMaps();
 	}
 	
 
-	IEnumerator LoadAllMaps() {
+	IEnumerator LoadMaps() {
 		Debug.Log("LoadAllMaps");
 		
-		listMaps = new ParseController.ListMapOperation();
-		listMaps.run();
+		var listMaps = new ParseController.ListMapOperation();
+        listMaps.run(mode=="mapeditor");
 		while (!listMaps.IsCompleted) yield return null;
         Debug.Log("load complete");
-
-		countNumMaps ();
-		loadMapButtons ();
+        mapList = listMaps.result;
+		RefreshButtons ();
 	}
 
-	void initMapsSPM () {
+    void LoadSinglePlayerMaps() {
+        mapList = new List<ParseController.MapEntity>();
+        mapList.Add(new ParseController.MapEntity(1,new int[,]{{7,5,0},{8,5,0},{10,5,0},{11,5,0},{12,5,0},{4,6,0},{5,6,0},{12,6,0},{4,7,0},{12,7,0},{4,8,0},{12,8,0},{4,10,0},{5,11,0},{6,12,0},{7,12,0},{7,13,0}}));
 
-		listLevelsSPM.Add(new ParseController.MapEntity(77777,new int[,]{{7,5,0},{8,5,0},{10,5,0},{11,5,0},{12,5,0},{4,6,0},{5,6,0},{12,6,0},{4,7,0},{12,7,0},{4,8,0},{12,8,0},{4,10,0},{5,11,0},{6,12,0},{7,12,0},{7,13,0}}));
-
-		listLevelsSPM.Add(new ParseController.MapEntity(1,new int[,]
+        mapList.Add(new ParseController.MapEntity(2,new int[,]
 		      {{11,3,0},{12,3,0},{11,4,0},{12,4,0},{13,4,0},{10,5,0},{13,5,0},{9,6,0},{14,6,0},{9,7,0},{14,7,0},{9,8,0},{10,8,0},{11,8,0},{12,8,0},{13,8,0},{10,9,0}})
 		);
 
-		countNumMaps ();
-		loadMapButtons ();
+        RefreshButtons();
 	}
 
-    IEnumerator initMapsMapEditor() {
-        Debug.Log("initMapsMapEditor");
-        
-        listMaps = new ParseController.ListMapOperation();
-        listMaps.run(true);
-        while (!listMaps.IsCompleted) yield return null;
-        Debug.Log("load complete");
-        
-        countNumMaps ();
-        loadMapButtons ();
+    private void SetMap(int i, ParseController.MapEntity map) {
+        UnityEngine.UI.Button[] buttons = new UnityEngine.UI.Button[]
+        {
+            map1Button,
+            map2Button,
+            map3Button
+        };
+        UnityEngine.UI.Image[] flags = new UnityEngine.UI.Image[]
+        {
+            flag1,
+            flag2,
+            flag3
+        };       
+
+        var text = map != null ? map.GetTitle() : "-";
+        bool done = map != null;
+        buttons [i].GetComponentInChildren<UnityEngine.UI.Text>().text =  text;
+        buttons [i].enabled = map != null;
+        flags [i].enabled = map != null && ParseController.HasCompletedSinglePlayerLevel(map.Number);
+    }
+                       
+
+    private void RefreshButtons() {
+        for (int i = 0; i < 3; i++)
+        {
+            var mapIndex = numButtonsPerPage * numPage + i;
+            if (mapIndex < mapList.Count) {
+                var map = mapList[mapIndex];
+                SetMap(i, map);
+            } else {
+                SetMap(i, null);
+            }
+        }
+        prevButton.enabled = numPage < 0;
+        nextButton.enabled = (numPage + 1) * numButtonsPerPage < mapList.Count;
+        nextButton.enabled = true;
     }
 
-	void countNumMaps() {
-		numMaps = 0;
-		if (mode == "multiplayer") {
-				foreach (ParseController.MapEntity map in listMaps.result) {
-						numMaps ++;
-				}
-		} else if (mode == "singleplayer") {
-			numMaps = listLevelsSPM.Count;
-		}
-		else if (mode=="mapeditor") {
-		}
-
-		numMaxPages = Mathf.CeilToInt(numMaps/numButtonsPerPage);
-		Debug.Log ("num pages" + numMaxPages);
-		Debug.Log ("num maps" + numMaps);
-	}
-
-	void loadMapButtons() {
-		int numCurrentMap = 0;
-		int numButton = 0;
-		paintNextPrevButtons ();
-
-		UnityEngine.UI.Text textLev1 = map1Button.GetComponentInChildren<UnityEngine.UI.Text> ();
-		UnityEngine.UI.Text textLev2 = map2Button.GetComponentInChildren<UnityEngine.UI.Text> ();
-		UnityEngine.UI.Text textLev3 = map3Button.GetComponentInChildren<UnityEngine.UI.Text> ();
-
-		List<ParseController.MapEntity> theList = new List<ParseController.MapEntity>();
-
-		if (mode == "multiplayer") {
-			theList = listMaps.result;
-		} else if (mode == "singleplayer") {
-			theList = listLevelsSPM;
-		}
-		else if (mode=="mapeditor") {
-            theList=listMaps.result;
-		}
-
-		foreach (ParseController.MapEntity map in theList)
-		{
-
-			if (numCurrentMap>=(numPage*numButtonsPerPage+numButtonsPerPage)) break;
-			else if (numCurrentMap<(numPage*numButtonsPerPage)) {
-			} else {
-				numButton = numCurrentMap%numButtonsPerPage;
-
-				if(numButton==0) { 
-					map1=map;
-					textLev1.text =  map.GetTitle();
-				} else if (numButton==1) { 
-					map2=map;
-                    textLev2.text =  map.GetTitle();
-				} else if (numButton==2) { 
-					map3=map;
-                    textLev3.text =  map.GetTitle();
-				}
-			}
-		
-			numCurrentMap++;
-		}
-
-		showAllMapButtons();
-		if (numButton == 0) {
-			map2Button.enabled = false;
-			textLev2.text = "";
-		} else if (numButton == 1) {
-			map3Button.enabled = false;
-			textLev3.text = "";
-		}
-	}
-
-	void paintNextPrevButtons() {
-		prevButton.enabled = true;
-		nextButton.enabled = true;
-		if (numPage == 0) {
-			prevButton.enabled=false;
-		}
-		if (numPage == numMaxPages-1) {
-			nextButton.enabled=false;
-		}
-	}
-
-	void showAllMapButtons(){
-		map1Button.enabled = true;
-		map2Button.enabled = true;
-		map3Button.enabled = true;
-	}
-
-	void hideAllMapButtons(){
-		map1Button.enabled = false;
-		map2Button.enabled = false;
-		map3Button.enabled = false;
-	}
-
+   
 	public void nextPageButtons() {
-		showAllMapButtons ();
-		numPage++;
-		loadMapButtons ();
+        numPage++;
+        RefreshButtons();
 	}
 
 	public void prevPageButtons() {
-		showAllMapButtons ();
 		numPage--;
-		loadMapButtons ();
+        RefreshButtons();
 	}
 
 	public void playMap(int i) {
-        ParseController.MapEntity mapToLoad = null; 
-        if (i == 1)
-            mapToLoad = map1;
-        else if (i == 2)
-            mapToLoad = map2;
-        else if (i == 3)
-            mapToLoad = map3;
-
+        ParseController.MapEntity mapToLoad = mapList[numButtonsPerPage * numPage + (i-1)]; 
         if (mode == "mapeditor")
         {
             MapEditor.mapEntity = mapToLoad;
@@ -211,6 +136,7 @@ public class MultiplayerController : MonoBehaviour {
 	public void goMainMenuButton() {
 		Application.LoadLevel("Main");
 	}
+
 
 	// Update is called once per frame
 	void Update () {

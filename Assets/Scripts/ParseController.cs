@@ -101,6 +101,44 @@ public class ParseController : ParseInitializeBehaviour
 
 
 
+    public static bool HasCompletedSinglePlayerLevel(int level) {
+        var l = GetCompletedSinglePlayerLevels();
+        for (int i = 0; i < l.Count; i++)
+        {
+            if (int.Parse(l[i].ToString())==level)
+                return true;
+        }
+        return false;
+    }
+    
+    public static List<object> GetCompletedSinglePlayerLevels() {
+        return ParseUser.CurrentUser.ContainsKey("splevels") ? ParseUser.CurrentUser.Get<List<object>>("splevels") : new List<object>();
+    }
+    
+    public static void CompleteSinglePlayerLevel(int level) {
+        if (!HasCompletedSinglePlayerLevel(level))
+        {
+            var user = ParseUser.CurrentUser;
+            var splevels = GetCompletedSinglePlayerLevels();
+            splevels.Add(level);
+            user ["splevels"] = splevels;
+            Debug.Log("BEFORE SAVE");
+            
+            user.SaveAsync().ContinueWith( t => {
+                if (t.IsFaulted) {
+                    Debug.Log("FAULTED");
+                } else {
+                    Debug.Log("OK");
+                }
+            });
+        }
+    }
+    
+    public static void ClearCompletedLevels() {
+        var user = ParseUser.CurrentUser;
+        user ["splevels"] = new List<object>();
+        user.SaveAsync();
+    }
 
 
 
