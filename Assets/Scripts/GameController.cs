@@ -223,7 +223,7 @@ public class GameController : MonoBehaviour
     
     IEnumerator YouWin()
     {
-        ParseController.CompleteLevel(mapToLoad.Author, mapToLoad.Number);
+        ParseController.CompleteLevel(mapToLoad);
         yield return new WaitForSeconds(1.5f);
         LoadScene("Main");
     }
