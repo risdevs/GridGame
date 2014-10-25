@@ -10,27 +10,33 @@ public class ParseController : ParseInitializeBehaviour
     {
         public ParseObject parseObject;
         public List<MapTile> tiles = new List<MapTile>();
-		public string id;
+        public int Number;
+        public string Author;
 
-        public MapEntity() {
+        // new map
+        public MapEntity(int Number)
+        {
             parseObject = new ParseObject("MapBytes");
+            this.Number = Number;
         }
 
-		// create from spm
-        public MapEntity(string id, int[,] data) {
-			this.id=id;
-			for (int i = 0; i < data.GetLength(0); i++) {
+        // create from spm
+        public MapEntity(int number, int[,] data)
+        {
+            this.Number = number;
+            for (int i = 0; i < data.GetLength(0); i++)
+            {
                 MapTile tile = new MapTile();
-                tile.x = data[i,0];
-                tile.y = data[i,1];
-                tile.sprite = data[i,2];
+                tile.x = data [i, 0];
+                tile.y = data [i, 1];
+                tile.sprite = data [i, 2];
                 this.tiles.Add(tile);
             }
         }
 
-		// CREATE FROM MULTIPLAYER
-        public MapEntity(ParseObject obj) {
-			this.id = this.parseObject.ObjectId;
+        // CREATE FROM MULTIPLAYER
+        public MapEntity(ParseObject obj)
+        {
             this.parseObject = obj;
             foreach (object tileobj in obj.Get<List<object>>("map"))
             {
@@ -41,9 +47,14 @@ public class ParseController : ParseInitializeBehaviour
                 tile.sprite = int.Parse(tileList [2].ToString());
                 this.tiles.Add(tile);
             }
+            if (obj.ContainsKey("mapNumber"))
+                this.Number =  int.Parse(obj ["mapNumber"].ToString()); 
+            if (obj.ContainsKey("author"))
+                this.Author = obj ["author"].ToString(); 
         }
         
-        public void Save() {
+        public void Save()
+        {
             List<List<float>> list = new List<List<float>>();
             foreach (MapTile t in tiles)
             {
@@ -51,15 +62,28 @@ public class ParseController : ParseInitializeBehaviour
             }
 
             parseObject ["map"] = list;
+            parseObject ["author"] = ParseUser.CurrentUser.Username;
+            //TODO: parseObject["mapNumber"] = ??
             parseObject.SaveAsync();
         }
 
-		public string GetUser() {
-			return null;
- 		}
-		public string getId() {
-			return this.id;
-		}
+        public int GetNumber()
+        {
+            return this.Number;
+        }
+
+        public string GetTitle()
+        {
+            if (this.parseObject == null)
+            {
+                return "Single Player " + this.GetNumber();
+            } else
+            {
+                return this.Author + " " + this.GetNumber();
+            }
+        }
+
+
     }
 
     public class MapTile
@@ -69,6 +93,11 @@ public class ParseController : ParseInitializeBehaviour
         public int sprite;
     }
 
+
+
+
+
+
     public override void Awake()
     {
         base.applicationID = "2QWerPx74sTKazgf92SYJuaMMP7jpOy0lB6fJ3NW";
@@ -76,45 +105,67 @@ public class ParseController : ParseInitializeBehaviour
         base.Awake();
     }
 
-    public bool IsLoggedIn()
-    {
-        return ParseUser.CurrentUser != null;
-    }
+    static bool loggedin = false;
 
-    public IEnumerator<bool> Login(string name)
+    public void Start()
     {
-        var task = ParseUser.LogInAsync(name, "socialpoint");
-        while (!task.IsCompleted)
-            yield return false;
-
-        if (task.IsFaulted || task.IsCanceled)
+        if (!loggedin)
         {
-            // The login failed. Check the error to see why.
-        } else
-        {
-            // Login was successful.
+            loggedin = true;
+            var user = ParseUser.CurrentUser;
+            if (user == null)
+            {
+                user = new ParseUser() {
+                    Username = "Player " + Random.Range(1, 10000),
+                    Password = "socialpoint",
+                };
+                user.SignUpAsync();
+            }
         }
-        yield return true;
     }
 
-    public void Register(string name)
+    public class ListMapOperation
     {
-    }
-
-    public class ListMapOperation {
-        public List<MapEntity> result;
-
+        public List<MapEntity> result = new List<MapEntity>();
         public bool IsCompleted = false;
 
-        public void run()
+        public void run(bool currentuser = false)
         {
-            ParseObject.GetQuery("MapBytes").FindAsync().ContinueWith(t => {
-                result = new List<MapEntity>();
+            var q = ParseObject.GetQuery("MapBytes");
+            if (currentuser)
+            {
+                q.WhereEqualTo("user", ParseUser.CurrentUser);
+            }
+            q.OrderByDescending("timesPlayed")
+                .FindAsync().ContinueWith(t => {
+                var mapsDict = new Dictionary<int, MapEntity>();
+                Debug.Log("LIST MAP BUCLE");
                 foreach (ParseObject obj in t.Result)
                 {
                     MapEntity map = new MapEntity(obj);
-                    result.Add(map);
+                  
+                    if (currentuser)
+                    {
+                        mapsDict [map.GetNumber()] = map;
+                    } else
+                    {
+                        result.Add(map);
+                    }
                 }
+                if (currentuser)
+                {
+                    for (int i = 1; i <= 24; i++)
+                    {
+                        if (mapsDict.ContainsKey(i))
+                        {
+                            result.Add(mapsDict [i]);
+                        } else
+                        {
+                            result.Add(new MapEntity(i));
+                        }
+                    }
+                } 
+                Debug.Log("FINISH LIST MAP");
                 IsCompleted = true;
             });
 

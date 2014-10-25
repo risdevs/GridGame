@@ -13,6 +13,11 @@ public class MapEditor : MonoBehaviour
 		BUILD,
 		DELETE
 	}
+
+
+	public UnityEngine.UI.Button printButton;
+	public UnityEngine.UI.Button playButton;
+
 	public MODE currentMode;
 
 	public Sprite[] sprites;
@@ -27,7 +32,7 @@ public class MapEditor : MonoBehaviour
 
 	private TileRenderer[] tiles;
 
-    private ParseController.MapEntity mapEntity;
+    static private ParseController.MapEntity mapEntity;
 
     	// Use this for initialization
 	void Start ()
@@ -35,7 +40,7 @@ public class MapEditor : MonoBehaviour
         Debug.Log("START");
         gridRendering = Camera.main.GetComponent<GridRendering> ();
 		tiles = new TileRenderer[GridRendering.COLS * GridRendering.ROWS];
-        mapEntity = new ParseController.MapEntity();
+        mapEntity = new ParseController.MapEntity(1);
         StartCoroutine("LoadMap");
 
         LoadUI();
@@ -70,7 +75,7 @@ public class MapEditor : MonoBehaviour
         Debug.Log("LOADMAP");
 
         ParseController.ListMapOperation list = new ParseController.ListMapOperation();
-        list.run();
+        list.run(false);
         while (!list.IsCompleted)
             yield return null;
             
@@ -112,6 +117,47 @@ public class MapEditor : MonoBehaviour
 		}
 
 	}
+
+	public void printButtonAction() {
+
+		/*
+		List<List<float>> list = new List<List<float>>();
+		foreach (MapTile t in tiles)
+		{
+			list.Add(new List<float>(){t.x, t.y, t.sprite});
+		}
+		
+		parseObject ["map"] = list;
+		parseObject.SaveAsync();
+		*/
+
+
+		/*
+
+		List<List<float>> list = new List<List<float>>();
+		//String que luego copiaremos para single Player
+		string strinMap = "listLevelsSPM.Add(new ParseController.MapEntity('MAP_NAME_HERE',new int[,]{";
+		
+		foreach (MapTile t in tiles)
+		{
+			list.Add(new List<float>(){t.x, t.y, t.sprite});
+			strinMap = strinMap + "{" + t.x + "," + t.y + "," +  t.sprite + "},";
+		}
+		
+		strinMap = strinMap.Remove(strinMap.Length - 1) + "}));";
+		//parseObject ["map"] = list;
+		//parseObject.SaveAsync();
+*/
+
+	}
+
+	public void playButtonAction(){
+		GameController.mapToLoad = mapEntity;
+		Application.LoadLevel("Game");
+
+	}
+
+
 
     private void SetupLevel()
     {
