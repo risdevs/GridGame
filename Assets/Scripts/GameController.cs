@@ -40,10 +40,17 @@ public class GameController : MonoBehaviour
 				tr.currentSprite = md.sprite;
 				tr.transform.parent = mapRoot.transform;
 
+
 				if (tr.currentSprite == 3)
 				{
 					BlockFollower follower = tr.gameObject.AddComponent("BlockFollower") as BlockFollower;
 					follower.target = player;
+				}
+
+
+				if (tr.currentSprite == 2)
+				{
+					BlockFireballs fireballs = tr.gameObject.AddComponent("BlockFireballs") as BlockFireballs;
 				}
 			}
 		}
