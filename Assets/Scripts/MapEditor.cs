@@ -49,6 +49,18 @@ public class MapEditor : MonoBehaviour
 			mapObject = t.Result;
 		});
 
+
+        //Create end flag
+        TileRenderer tr = (TileRenderer) Instantiate (tilePrefab);
+        tr.tile = new Vector3 (GridRendering.COLS - 1, 1);
+        tr.currentSprite = 4;
+        tr.transform.parent = mapRoot.transform;
+        tr.gameObject.name = Utils.NAME_END_FLAG;
+        tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
+        tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        int xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
+        tiles[xy] = tr;
 	}
 
 	// Update is called once per frame
@@ -79,6 +91,12 @@ public class MapEditor : MonoBehaviour
 				tr.currentSprite = sprite;
 				tr.transform.parent = mapRoot.transform;
 				int xy = ((int)y) * GridRendering.COLS + ((int)x);
+
+                if(tiles[xy] != null)
+                {
+                    DeleteTile(x, y);
+                }
+
 				tiles[xy] = tr;
 			}
 			mapLoaded = true;
@@ -117,11 +135,18 @@ public class MapEditor : MonoBehaviour
 		
 		if (tiles[xy] != null)
 		{
-			TileRenderer tr = tiles[xy];
-			tiles[xy] = null;
-			tr.transform.parent = null;
-			Destroy (tr.gameObject);
+            DeleteTile(tile.x, tile.y);
         }
+    }
+
+    private void DeleteTile(float x, float y)
+    {
+        int xy = ((int)y) * GridRendering.COLS + ((int)x);
+
+        TileRenderer tr = tiles[xy];
+        tiles[xy] = null;
+        tr.transform.parent = null;
+        Destroy (tr.gameObject);
     }
 
 	public void ChangeTile(UnityEngine.UI.Button b)

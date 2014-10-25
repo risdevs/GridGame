@@ -2,8 +2,9 @@
 using System.Collections;
 
 public class Utils {
-
-	public static string NAME_ENEMY_FOLLOWER = "FOLLOWER_ENEMY";
+    
+    public static string NAME_ENEMY_FOLLOWER = "FOLLOWER_ENEMY";
+    public static string NAME_END_FLAG = "END_FLAG";
 
 	public enum LAYERS
 	{
