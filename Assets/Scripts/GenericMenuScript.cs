@@ -1,11 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Parse;
 
 public class GenericMenuScript : MonoBehaviour {
 
-	// Use this for initialization
+    public UnityEngine.UI.InputField NameInput;
+
+    // Use this for initialization
 	void Start () {
-	
+        if (NameInput != null)
+        {
+            NameInput.text.text = ParseUser.CurrentUser.Username;
+        }	
 	}
 	
 	// Update is called once per frame
@@ -21,4 +27,8 @@ public class GenericMenuScript : MonoBehaviour {
 		MultiplayerController.mode = mode;
 		Application.LoadLevel ("MultiPlayerMenu");
 	}
+
+    public void UpdateUserName() {
+        ParseController.RenameUser(NameInput.text.text);
+    }
 }
