@@ -31,8 +31,8 @@ public class MapEditor : MonoBehaviour
         Debug.Log("START");
         gridRendering = Camera.main.GetComponent<GridRendering> ();
 		tiles = new TileRenderer[GridRendering.COLS * GridRendering.ROWS];
-        StartCoroutine("LoadMap");
-        //SetupLevel();
+        mapEntity = new ParseController.MapEntity();
+        //StartCoroutine("LoadMap");
 	}
 
 

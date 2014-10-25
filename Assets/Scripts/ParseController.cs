@@ -11,6 +11,33 @@ public class ParseController : ParseInitializeBehaviour
         public ParseObject parseObject;
         public List<MapTile> tiles = new List<MapTile>();
 
+        public MapEntity() {
+            parseObject = new ParseObject("MapBytes");
+        }
+
+        public MapEntity(int[,] data) {
+            for (int i = 0; i < data.GetLength(0); i++) {
+                MapTile tile = new MapTile();
+                tile.x = data[i,0];
+                tile.y = data[i,1];
+                tile.sprite = data[i,2];
+                this.tiles.Add(tile);
+            }
+        }
+
+        public MapEntity(ParseObject obj) {
+            this.parseObject = obj;
+            foreach (object tileobj in obj.Get<List<object>>("map"))
+            {
+                List<object> tileList = (List<object>)tileobj;
+                MapTile tile = new MapTile();
+                tile.x = float.Parse(tileList [0].ToString());
+                tile.y = float.Parse(tileList [1].ToString());
+                tile.sprite = int.Parse(tileList [2].ToString());
+                this.tiles.Add(tile);
+            }
+        }
+        
         public void Save() {
             List<List<float>> list = new List<List<float>>();
             foreach (MapTile t in tiles)
@@ -73,17 +100,7 @@ public class ParseController : ParseInitializeBehaviour
                 result = new List<MapEntity>();
                 foreach (ParseObject obj in t.Result)
                 {
-                    MapEntity map = new MapEntity();
-                    map.parseObject = obj;
-                    foreach (object tileobj in obj.Get<List<object>>("map"))
-                    {
-                        List<object> tileList = (List<object>)tileobj;
-                        MapTile tile = new MapTile();
-                        tile.x = float.Parse(tileList [0].ToString());
-                        tile.y = float.Parse(tileList [1].ToString());
-                        tile.sprite = int.Parse(tileList [2].ToString());
-                        map.tiles.Add(tile);
-                    }
+                    MapEntity map = new MapEntity(obj);
                     result.Add(map);
                 }
                 IsCompleted = true;
