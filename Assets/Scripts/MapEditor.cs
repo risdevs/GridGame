@@ -63,12 +63,12 @@ public class MapEditor : MonoBehaviour
     {
         Resolution res = Screen.currentResolution;
         Button b;
-        for (int i = 0; i < sprites.Length; i++)
+        for (int i = 1; i < sprites.Length; i++)
         {
             b = Instantiate(tileButtonPrefab) as Button;
             b.GetComponent<Image>().sprite = sprites[i];
             b.transform.parent = mainCanvas.transform;
-            b.transform.localPosition = new Vector3(50 + (sprites[i].bounds.size.x + 25) * 3 * i - 320, -150);
+            b.transform.localPosition = new Vector3(50 + (sprites[i].bounds.size.x + 25) * 3 * (i-1) - 320, -150);
             b.transform.localScale = new Vector3(3,3);
 
             int j = i;
@@ -134,8 +134,6 @@ public class MapEditor : MonoBehaviour
 
 	}
 
-
-
     private void SetupLevel()
     {
         TileRenderer tr;
@@ -145,7 +143,7 @@ public class MapEditor : MonoBehaviour
         //Create end flag
         tr = (TileRenderer) Instantiate (tilePrefab);
         tr.tile = new Vector3 (GridRendering.COLS - 1, 1);
-        tr.currentSprite = 0;
+        tr.currentSprite = 5;
         tr.transform.parent = mapRoot.transform;
         tr.gameObject.name = Utils.NAME_TILE_END_FLAG;
         tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
@@ -158,12 +156,12 @@ public class MapEditor : MonoBehaviour
         }
         tiles[xy] = tr;
 
-
+        /*
         for (int i = 0; i < GridRendering.COLS; i++)
         {
             tr = (TileRenderer) Instantiate (tilePrefab);
             tr.tile = new Vector3 (i,-1);
-            tr.currentSprite = 4;
+            tr.currentSprite = 0;
             tr.transform.parent = mapRoot.transform;
             tr.gameObject.name = Utils.NAME_TILE_DEAD;
             tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
@@ -174,7 +172,7 @@ public class MapEditor : MonoBehaviour
             
             tr = (TileRenderer) Instantiate (tilePrefab);
             tr.tile = new Vector3 (i,GridRendering.ROWS);
-            tr.currentSprite = 4;
+            tr.currentSprite = 0;
             tr.transform.parent = mapRoot.transform;
         }
 
@@ -182,16 +180,16 @@ public class MapEditor : MonoBehaviour
         {
             tr = (TileRenderer) Instantiate (tilePrefab);
             tr.tile = new Vector3 (-1,i);
-            tr.currentSprite = 4;
+            tr.currentSprite = 0;
             tr.transform.parent = mapRoot.transform;
 
 
             tr = (TileRenderer) Instantiate (tilePrefab);
             tr.tile = new Vector3 (GridRendering.COLS, i);
-            tr.currentSprite = 4;
+            tr.currentSprite = 0;
             tr.transform.parent = mapRoot.transform;
         }
-
+*/
     }
 	
 	private void BuildTile()

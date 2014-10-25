@@ -51,7 +51,60 @@ public class GameController : MonoBehaviour
             }
         }
 
+        SetupLevel();
+    }
 
+    private void SetupLevel()
+    {
+        TileRenderer tr;
+        int xy;
+        
+        
+        //Create end flag
+        tr = (TileRenderer) Instantiate (tileRenderer);
+        tr.tile = new Vector3 (GridRendering.COLS - 1, 1);
+        tr.currentSprite = 5;
+        tr.transform.parent = mapRoot.transform;
+        tr.gameObject.name = Utils.NAME_TILE_END_FLAG;
+        tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
+        tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+        
+        xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
+
+        
+        for (int i = 0; i < GridRendering.COLS; i++)
+        {
+            tr = (TileRenderer) Instantiate (tileRenderer);
+            tr.tile = new Vector3 (i,-1);
+            tr.currentSprite = 0;
+            tr.transform.parent = mapRoot.transform;
+            tr.gameObject.name = Utils.NAME_TILE_DEAD;
+            tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
+            tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+            
+            
+            
+            
+            tr = (TileRenderer) Instantiate (tileRenderer);
+            tr.tile = new Vector3 (i,GridRendering.ROWS);
+            tr.currentSprite = 0;
+            tr.transform.parent = mapRoot.transform;
+        }
+        
+        for (int i = 0; i < GridRendering.ROWS; i++)
+        {
+            tr = (TileRenderer) Instantiate (tileRenderer);
+            tr.tile = new Vector3 (-1,i);
+            tr.currentSprite = 0;
+            tr.transform.parent = mapRoot.transform;
+            
+            
+            tr = (TileRenderer) Instantiate (tileRenderer);
+            tr.tile = new Vector3 (GridRendering.COLS, i);
+            tr.currentSprite = 0;
+            tr.transform.parent = mapRoot.transform;
+        }
+        
     }
     
     // Update is called once per frame
