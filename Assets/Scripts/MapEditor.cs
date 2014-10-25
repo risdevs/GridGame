@@ -50,8 +50,8 @@ public class MapEditor : MonoBehaviour
             b = Instantiate(tileButtonPrefab) as Button;
             b.GetComponent<Image>().sprite = sprites[i];
             b.transform.parent = mainCanvas.transform;
-            b.transform.Translate(new Vector3(res.width * 0.05f + (sprites[i].bounds.size.x + 10) * 5 * i, res.height * 0.3f));
-            b.transform.localScale = new Vector3(5,5);
+            b.transform.localPosition = new Vector3(50 + (sprites[i].bounds.size.x + 25) * 3 * i - 320, -150);
+            b.transform.localScale = new Vector3(3,3);
 
 
             int j = i;
