@@ -95,6 +95,24 @@ public class MapEditor : MonoBehaviour
     {
         TileRenderer tr;
         int xy;
+
+        
+        //Create end flag
+        tr = (TileRenderer) Instantiate (tilePrefab);
+        tr.tile = new Vector3 (GridRendering.COLS - 1, 1);
+        tr.currentSprite = 4;
+        tr.transform.parent = mapRoot.transform;
+        tr.gameObject.name = Utils.NAME_TILE_END_FLAG;
+        tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
+        tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+
+        xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
+        if(tiles[xy] != null)
+        {
+            DeleteTile(tr.tile.x, tr.tile.y);
+        }
+        tiles[xy] = tr;
+
         /*
         for (int i = 0; i < GridRendering.COLS; i++)
         {
@@ -129,21 +147,6 @@ public class MapEditor : MonoBehaviour
             tr.transform.parent = mapRoot.transform;
         }
         */
-        //Create end flag
-        tr = (TileRenderer) Instantiate (tilePrefab);
-        tr.tile = new Vector3 (GridRendering.COLS - 1, 1);
-        tr.currentSprite = 4;
-        tr.transform.parent = mapRoot.transform;
-        tr.gameObject.name = Utils.NAME_TILE_END_FLAG;
-        tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
-        tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
-        
-        xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
-        if(tiles[xy] != null)
-        {
-            DeleteTile(tr.tile.x, tr.tile.y);
-        }
-        tiles[xy] = tr;
     }
 	
 	private void BuildTile()

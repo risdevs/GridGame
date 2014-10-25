@@ -25,6 +25,8 @@ public class TileRenderer : MonoBehaviour
 		scale = new Vector3(gridRendering.tileSize / b.size.x, gridRendering.tileSize / b.size.y);
 
 		UpdateSpriteScale ();
+        Destroy(GetComponent<BoxCollider2D>());
+        gameObject.AddComponent<BoxCollider2D>();
 
 		Vector3 v3 = gridRendering.TileToWorld (tile);
 		gameObject.transform.position = v3 + (b.size/2 * scale.x); //new Vector3( b.size.x * scale, b.size.y * scale);
@@ -34,12 +36,11 @@ public class TileRenderer : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		UpdateSpriteScale ();
+		//UpdateSpriteScale ();
 	}
 
 	private void UpdateSpriteScale()
 	{
 		transform.localScale = scale;
-        (collider2D as BoxCollider2D).size = spriteRenderer.bounds.size;
 	}
 }
