@@ -41,7 +41,7 @@ public class MultiplayerController : MonoBehaviour {
 
 		if (mode=="multiplayer") StartCoroutine("LoadAllMaps");
 		else if (mode == "singleplayer") initMapsSPM();
-		else if (mode=="mapeditor") initMapsMapEditor();
+        else if (mode=="mapeditor") StartCoroutine("initMapsMapEditor");
 
 	}
 	
@@ -75,8 +75,17 @@ public class MultiplayerController : MonoBehaviour {
 		loadMapButtons ();
 	}
 
-	void initMapsMapEditor() {
-	}
+    IEnumerator initMapsMapEditor() {
+        Debug.Log("initMapsMapEditor");
+        
+        listMaps = new ParseController.ListMapOperation();
+        listMaps.run(true);
+        while (!listMaps.IsCompleted) yield return null;
+        Debug.Log("load complete");
+        
+        countNumMaps ();
+        loadMapButtons ();
+    }
 
 	void countNumMaps() {
 		numMaps = 0;
@@ -112,7 +121,7 @@ public class MultiplayerController : MonoBehaviour {
 			theList = listLevelsSPM;
 		}
 		else if (mode=="mapeditor") {
-			theList=null;
+            theList=listMaps.result;
 		}
 
 		foreach (ParseController.MapEntity map in theList)
@@ -184,10 +193,24 @@ public class MultiplayerController : MonoBehaviour {
 	}
 
 	public void playMap(int i) {
-		if (i==1) GameController.mapToLoad = map1;
-		else if (i==2) GameController.mapToLoad = map2;
-		else if (i==3) GameController.mapToLoad = map3;
-		Application.LoadLevel("Game");
+        ParseController.MapEntity mapToLoad = null; 
+        if (i == 1)
+            mapToLoad = map1;
+        else if (i == 2)
+            mapToLoad = map2;
+        else if (i == 3)
+            mapToLoad = map3;
+
+        if (mode == "mapeditor")
+        {
+            MapEditor.mapEntity = mapToLoad;
+            Application.LoadLevel("Editor");
+        } else
+        {
+            GameController.mapToLoad = mapToLoad;
+            Application.LoadLevel("Game");
+        }
+
 	}
 
 	public void goMainMenuButton() {

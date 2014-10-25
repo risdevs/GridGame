@@ -12,6 +12,7 @@ public class ParseController : ParseInitializeBehaviour
         public List<MapTile> tiles = new List<MapTile>();
         public int Number;
         public string Author;
+        public string AuthorId;
 
         // new map
         public MapEntity(int Number)
@@ -51,6 +52,8 @@ public class ParseController : ParseInitializeBehaviour
                 this.Number =  int.Parse(obj ["mapNumber"].ToString()); 
             if (obj.ContainsKey("author"))
                 this.Author = obj ["author"].ToString(); 
+            if (obj.ContainsKey("authorId"))
+                this.AuthorId = obj ["authorId"].ToString(); 
         }
         
         public void Save()
@@ -63,6 +66,7 @@ public class ParseController : ParseInitializeBehaviour
 
             parseObject ["map"] = list;
             parseObject ["author"] = ParseUser.CurrentUser.Username;
+            parseObject ["authorId"] = ParseUser.CurrentUser.ObjectId;
             //TODO: parseObject["mapNumber"] = ??
             parseObject.SaveAsync();
         }
@@ -121,6 +125,8 @@ public class ParseController : ParseInitializeBehaviour
                 };
                 user.SignUpAsync();
             }
+            Debug.Log("User Name: " + user.Username);
+            Debug.Log("User ObjectId: " + user.ObjectId);
         }
     }
 
@@ -134,7 +140,7 @@ public class ParseController : ParseInitializeBehaviour
             var q = ParseObject.GetQuery("MapBytes");
             if (currentuser)
             {
-                q.WhereEqualTo("user", ParseUser.CurrentUser);
+                q.WhereEqualTo("authorId", ParseUser.CurrentUser.ObjectId);
             }
             q.OrderByDescending("timesPlayed")
                 .FindAsync().ContinueWith(t => {

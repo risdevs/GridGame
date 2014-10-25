@@ -27,7 +27,7 @@ public class MapEditor : MonoBehaviour
 
 	private TileRenderer[] tiles;
 
-    static private ParseController.MapEntity mapEntity;
+    public static ParseController.MapEntity mapEntity;
 
     	// Use this for initialization
 	void Start ()
@@ -35,11 +35,24 @@ public class MapEditor : MonoBehaviour
         Debug.Log("START");
         gridRendering = Camera.main.GetComponent<GridRendering> ();
 		tiles = new TileRenderer[GridRendering.COLS * GridRendering.ROWS];
-        mapEntity = new ParseController.MapEntity(1);
-        StartCoroutine("LoadMap");
+
 
         LoadUI();
-	}
+        foreach (ParseController.MapTile t in mapEntity.tiles) {
+            TileRenderer tr = (TileRenderer) Instantiate (tilePrefab);
+            tr.tile = new Vector3 (t.x, t.y);
+            tr.currentSprite = t.sprite;
+            tr.transform.parent = mapRoot.transform;
+            int xy = ((int)t.y) * GridRendering.COLS + ((int)t.x);
+            
+            if(tiles[xy] != null)
+            {
+                DeleteTile(t.x, t.y);
+            }
+            tiles[xy] = tr;
+        }
+        SetupLevel();
+    }
 
     private void LoadUI()
     {
@@ -64,36 +77,6 @@ public class MapEditor : MonoBehaviour
     }
 
 
-    IEnumerator LoadMap() {
-        Debug.Log("LOADMAP");
-
-        ParseController.ListMapOperation list = new ParseController.ListMapOperation();
-        list.run(false);
-        while (!list.IsCompleted)
-            yield return null;
-            
-        foreach (ParseController.MapEntity map in list.result)
-        {
-            Debug.Log(map.parseObject.ObjectId);
-            foreach (ParseController.MapTile t in map.tiles) {
-                TileRenderer tr = (TileRenderer) Instantiate (tilePrefab);
-                tr.tile = new Vector3 (t.x, t.y);
-                tr.currentSprite = t.sprite;
-                tr.transform.parent = mapRoot.transform;
-                int xy = ((int)t.y) * GridRendering.COLS + ((int)t.x);
-                
-                if(tiles[xy] != null)
-                {
-                    DeleteTile(t.x, t.y);
-                }
-                tiles[xy] = tr;
-            }
-            
-            SetupLevel();
-            mapEntity = map;
-            break;
-        }
-    }
 
 	// Update is called once per frame
 	void Update ()
