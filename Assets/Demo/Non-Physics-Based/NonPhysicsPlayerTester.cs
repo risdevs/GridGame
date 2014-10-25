@@ -120,15 +120,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 		}
 
 		List<GameObject> hitObjects = GetHitObjects ();
-		foreach (GameObject hitObject in hitObjects) {
-			if (hitObject == LeftControl) {
-				LeftPressed = true;
-			} else if (hitObject == RightControl) {
-				RightPressed = true;
-			} else if (hitObject == JumpControl) {
-				JumpPressed = true;
-			}
-		}
+		
 		// grab our current _velocity to use as a base for all calculations
 		_velocity = _controller.velocity;
 
@@ -194,6 +186,24 @@ public class NonPhysicsPlayerTester : MonoBehaviour
     
     
     public void setJumpDown(bool down)
+    {
+        JumpPressed = down;
+    }
+
+    
+    public void setLeftOver(bool down)
+    {
+        LeftPressed = down;
+    }
+    
+    
+    public void setRightOver(bool down)
+    {
+        RightPressed = down;
+    }
+    
+    
+    public void setJumpOver(bool down)
     {
         JumpPressed = down;
     }
