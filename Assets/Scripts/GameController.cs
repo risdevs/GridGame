@@ -17,11 +17,20 @@ public class GameController : MonoBehaviour
     public UnityEngine.UI.Button b;
     private CharacterController2D controller;
 
-	public UnityEngine.UI.Text diesText;
+    public UnityEngine.UI.Text diesText;
 
-	public static int numDies = 0;
-	public static int lastLevel = 0;
-	public bool heroIsDead = false;
+    public static int numDies = 0;
+    public static int lastLevel = 0;
+    public bool heroIsDead = false;
+
+    private TileRenderer[] _tiles;
+    public TileRenderer[] tiles
+    {
+        get
+        {
+            return _tiles;
+        }
+    }
 
     // Use this for initialization
     void Start()
@@ -37,7 +46,10 @@ public class GameController : MonoBehaviour
         controller.onTriggerEnterEvent += onTriggerEnterEvent;
         controller.onTriggerExitEvent += onTriggerExitEvent;
 
+        _tiles = new TileRenderer[GridRendering.COLS * GridRendering.ROWS];
 
+        
+        int xy;
         foreach (ParseController.MapTile t in mapToLoad.tiles)
         {
             TileRenderer tr = (TileRenderer)Instantiate(tileRenderer);
@@ -52,11 +64,34 @@ public class GameController : MonoBehaviour
                 follower.target = player;
             }
             
-
+            
             if (tr.currentSprite == 2)
             {
                 tr.gameObject.AddComponent("BlockFireballs");
             }
+            
+            
+            if (tr.currentSprite == 6)
+            {
+                tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
+                tr.name = Utils.NAME_ENEMY_FOLLOWER;
+                tr.GetComponent<BoxCollider2D>().isTrigger = true;
+            }
+            
+            
+            if (tr.currentSprite == 7 || tr.currentSprite == 8)
+            {
+                tr.transform.localScale = new Vector3(tr.transform.localScale.x * 0.9f, tr.transform.localScale.y * 0.9f, tr.transform.localScale.z);
+                tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
+                tr.name = Utils.NAME_ENEMY_FOLLOWER;
+                tr.GetComponent<BoxCollider2D>().isTrigger = true;
+                tr.GetComponent<SpriteRenderer>().sortingOrder = 1;
+
+
+                BlockMover mover = tr.gameObject.AddComponent<BlockMover>() as BlockMover;
+                mover.oscilation = (tr.currentSprite == 7 ? new Vector3(3, 0) : new Vector3(0, 3) );
+            }
+
 
             if (tr.currentSprite == 0)
             {
@@ -64,6 +99,9 @@ public class GameController : MonoBehaviour
                 tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
                 tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
             }
+            
+            xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
+            tiles[xy] = tr;
         }
 
         SetupLevel();
@@ -72,7 +110,6 @@ public class GameController : MonoBehaviour
     private void SetupLevel()
     {
         TileRenderer tr;
-        int xy;
         
         
         //Create end flag
@@ -83,8 +120,7 @@ public class GameController : MonoBehaviour
         tr.gameObject.name = Utils.NAME_TILE_END_FLAG;
         tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
         tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
-        
-        xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
+
 
         
         for (int i = 0; i < GridRendering.COLS; i++)
@@ -96,17 +132,17 @@ public class GameController : MonoBehaviour
             tr.gameObject.name = Utils.NAME_TILE_DEAD;
             tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
             tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+
             
-            
-            
-            
+            /*
             tr = (TileRenderer) Instantiate (tileRenderer);
             tr.tile = new Vector3 (i,GridRendering.ROWS);
             tr.currentSprite = 0;
             tr.transform.parent = mapRoot.transform;
+            */
         }
         
-        for (int i = 0; i < GridRendering.ROWS; i++)
+        for (int i = 0; i < GridRendering.ROWS + 5; i++)
         {
             tr = (TileRenderer) Instantiate (tileRenderer);
             tr.tile = new Vector3 (-1,i);
@@ -161,7 +197,8 @@ public class GameController : MonoBehaviour
             StartCoroutine(YouWin());
         }
 
-        if (name == Utils.NAME_TILE_DEAD || name == Utils.NAME_ENEMY_FOLLOWER || name == Utils.NAME_ENEMY_FIREBALL)
+        if (name == Utils.NAME_TILE_DEAD || name == Utils.NAME_ENEMY_FOLLOWER ||
+            name == Utils.NAME_ENEMY_FIREBALL /*|| name == Utils.NAME_ENEMY_KOOPA*/)
         {
             Debug.Log("YOU DIE");
             gameText.text = "YOU DIE";
@@ -181,7 +218,7 @@ public class GameController : MonoBehaviour
     {
         ParseController.CompleteLevel(mapToLoad);
         yield return new WaitForSeconds(1.5f);
-        Application.LoadLevel("Main");
+        LoadScene("Main");
     }
     
     IEnumerator YouDie()
