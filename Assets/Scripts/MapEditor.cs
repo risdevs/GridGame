@@ -33,10 +33,10 @@ public class MapEditor : MonoBehaviour
 	
 	private void LoadLevel()
 	{
-		if (File.Exists (GetSaveDataFile()))
+		if (File.Exists (Utils.GetSaveDataFile()))
 		{
 			BinaryFormatter bf = new BinaryFormatter();
-			FileStream file = File.Open (GetSaveDataFile(), FileMode.Open);
+			FileStream file = File.Open (Utils.GetSaveDataFile(), FileMode.Open);
 			ArrayList list = (ArrayList) bf.Deserialize(file);
 			file.Close();
 			
@@ -128,7 +128,7 @@ public class MapEditor : MonoBehaviour
 		}
 
 		BinaryFormatter bf = new BinaryFormatter();
-		FileStream file = File.Create (GetSaveDataFile());
+		FileStream file = File.Create (Utils.GetSaveDataFile());
 		bf.Serialize (file, list);
 		file.Close();
 	}
@@ -142,16 +142,6 @@ public class MapEditor : MonoBehaviour
 		} else {
 			currentMode = MODE.BUILD;
 			b.GetComponentInChildren<UnityEngine.UI.Text> ().text = "BUILD";
-		}
-	}
-
-	private string GetSaveDataFile()
-	{
-		if(Application.platform == RuntimePlatform.IPhonePlayer)
-		{
-			return  Utils.GetiPhoneDocumentsPath() + "/savedGames.gd";
-		} else{
-			return Application.persistentDataPath + "/savedGames.gd";
 		}
 	}
 }

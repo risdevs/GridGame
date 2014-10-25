@@ -24,10 +24,10 @@ public class GameController : MonoBehaviour
 
 	private void LoadLevel()
 	{
-		if (File.Exists (Application.persistentDataPath + "/savedGames.gd"))
+		if (File.Exists (Utils.GetSaveDataFile()))
 		{
 			BinaryFormatter bf = new BinaryFormatter();
-			FileStream file = File.Open (Application.persistentDataPath + "/savedGames.gd", FileMode.Open);
+			FileStream file = File.Open (Utils.GetSaveDataFile(), FileMode.Open);
 			ArrayList list = (ArrayList) bf.Deserialize(file);
 			file.Close();
 

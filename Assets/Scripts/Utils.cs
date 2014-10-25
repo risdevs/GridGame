@@ -14,4 +14,14 @@ public class Utils {
 		path = path.Substring(0, path.LastIndexOf('/'));  
 		return path + "/Documents"; 
 	}
+	
+	public static string GetSaveDataFile()
+	{
+		if(Application.platform == RuntimePlatform.IPhonePlayer)
+		{
+			return  Utils.GetiPhoneDocumentsPath() + "/savedGames.gd";
+		} else{
+			return Application.persistentDataPath + "/savedGames.gd";
+		}
+	}
 }
