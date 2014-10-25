@@ -7,12 +7,14 @@ using System.IO;
 
 public class GameController : MonoBehaviour
 {
+    public static ParseController.MapEntity mapToLoad = null;
+    public static int sceneToBack = -1;
+
     public TileRenderer tileRenderer;
     public GameObject mapRoot;
     public GameObject player;
     public Text gameText;
     public UnityEngine.UI.Button b;
-    public static ParseController.MapEntity mapToLoad = null;
     private CharacterController2D controller;
 
     // Use this for initialization
@@ -176,6 +178,13 @@ public class GameController : MonoBehaviour
 
     public void LoadScene(string scene)
     {
-        Application.LoadLevel(scene);
+        if (GameController.sceneToBack >= 0)
+        {
+            Application.LoadLevel(GameController.sceneToBack);
+            GameController.sceneToBack = -1;
+        } else
+        {
+            Application.LoadLevel(scene);
+        }
     }
 }
