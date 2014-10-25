@@ -45,10 +45,11 @@ public class RankingController : MonoBehaviour
 
         int pos = 100;
         string field = multiplayer ? "mpscore" : "spscore";
+        int rank = 1;
         foreach (ParseUser u in o.result)
         {
             UnityEngine.UI.Text textName = Instantiate(textPrefab) as UnityEngine.UI.Text;
-            textName.text = u.Username;
+            textName.text = "" + rank + " - " + (u.ObjectId == ParseUser.CurrentUser.ObjectId ? " ---> " : "") + u.Username;
             textName.transform.parent = mainCanvas.transform;
             textName.transform.localPosition = new Vector3(-30,pos);
             textName.alignment = TextAnchor.MiddleLeft;
@@ -60,6 +61,7 @@ public class RankingController : MonoBehaviour
             textScore.alignment = TextAnchor.MiddleRight;
             addedTexts.Add(textScore);
             pos -= 20;
+            rank++;
 
         }
     }
