@@ -23,32 +23,48 @@ public class MapEditor : MonoBehaviour
 
 	private TileRenderer[] tiles;
 
+    private ParseController.MapEntity mapEntity;
 
-	private ParseObject mapObject;
-
-	private bool mapLoaded = false;
-
-	// Use this for initialization
+    	// Use this for initialization
 	void Start ()
 	{
-		gridRendering = Camera.main.GetComponent<GridRendering> ();
+        Debug.Log("START");
+        gridRendering = Camera.main.GetComponent<GridRendering> ();
 		tiles = new TileRenderer[GridRendering.COLS * GridRendering.ROWS];
-
-		LoadLevel ();
+        StartCoroutine("LoadMap");
 	}
-	
-	private void LoadLevel()
-	{
 
-		Debug.Log ("LOAD LEVEL");
-		ParseObject.GetQuery ("MapBytes").GetAsync ("z820YEC0OE").ContinueWith (t => {
-			if (t.IsFaulted) {
-				Debug.Log("ERROR");
-			}
-			Debug.Log ("LOAD LEVEL START");
-			mapObject = t.Result;
-   		});
-	}
+
+    IEnumerator LoadMap() {
+        Debug.Log("LOADMAP");
+
+        ParseController.ListMapOperation list = new ParseController.ListMapOperation();
+        list.run();
+        while (!list.IsCompleted)
+            yield return null;
+            
+        foreach (ParseController.MapEntity map in list.result)
+        {
+            Debug.Log(map.parseObject.ObjectId);
+            foreach (ParseController.MapTile t in map.tiles) {
+                TileRenderer tr = (TileRenderer) Instantiate (tilePrefab);
+                tr.tile = new Vector3 (t.x, t.y);
+                tr.currentSprite = t.sprite;
+                tr.transform.parent = mapRoot.transform;
+                int xy = ((int)t.y) * GridRendering.COLS + ((int)t.x);
+                
+                if(tiles[xy] != null)
+                {
+                    DeleteTile(t.x, t.y);
+                }
+                tiles[xy] = tr;
+            }
+            
+            SetupLevel();
+            mapEntity = map;
+            break;
+        }
+    }
 
 	// Update is called once per frame
 	void Update ()
@@ -64,31 +80,6 @@ public class MapEditor : MonoBehaviour
 			}
 		}
 
-		if (mapObject != null && !mapLoaded) {
-			foreach (object tileobj in mapObject.Get<List<object>>("map")) {
-				List<object> tile = (List<object>)tileobj;
-				Debug.Log ("LOAD LEVEL TILE "  + tile[0].ToString());
-				float x = float.Parse(tile[0].ToString());
-				float y = float.Parse(tile[1].ToString());
-				int sprite = int.Parse(tile[2].ToString());
-				Debug.Log ("LOAD LEVEL TILE " + x + " " + y + " " + sprite);
-				//TODO: SERGI ESTO NO FUNCIONA DESDE ESTE THREAD
-				TileRenderer tr = (TileRenderer) Instantiate (tilePrefab);
-				tr.tile = new Vector3 (x, y);
-				tr.currentSprite = sprite;
-				tr.transform.parent = mapRoot.transform;
-				int xy = ((int)y) * GridRendering.COLS + ((int)x);
-
-                if(tiles[xy] != null)
-                {
-                    DeleteTile(x, y);
-                }
-				tiles[xy] = tr;
-			}
-            
-            SetupLevel();
-            mapLoaded = true;
-		}
 	}
 
     private void SetupLevel()
@@ -204,18 +195,19 @@ public class MapEditor : MonoBehaviour
 
 	public void SaveMap()
 	{
-		List<List<float>> list = new List<List<float>> ();
-
-		for(int i = 0; i < tiles.Length; i++)
-		{
-			if(tiles[i] != null)
-			{
-				list.Add(new List<float>(){tiles[i].tile.x, tiles[i].tile.y, tiles[i].currentSprite});
-			}
-		}
-
-		mapObject ["map"] = list;
-		mapObject.SaveAsync ();
+        mapEntity.tiles.Clear();
+        for(int i = 0; i < tiles.Length; i++)
+        {
+            if(tiles[i] != null)
+            {
+                ParseController.MapTile t = new ParseController.MapTile();
+                t.x = tiles[i].tile.x;
+                t.y = tiles[i].tile.y;
+                t.sprite = tiles[i].currentSprite;
+                mapEntity.tiles.Add(t);
+            }
+        }
+        mapEntity.Save();
 
 	}
 

@@ -15,7 +15,7 @@ public class GameController : MonoBehaviour
     void Start()
 	{
 		//LoadBasicLevel ();
-		LoadLevel ();
+        StartCoroutine("LoadMap");
     }
     
     // Update is called once per frame
@@ -23,37 +23,43 @@ public class GameController : MonoBehaviour
     {
     }
 
-	private void LoadLevel()
-	{
-		if (File.Exists (Utils.GetSaveDataFile()))
-		{
-			BinaryFormatter bf = new BinaryFormatter();
-			FileStream file = File.Open (Utils.GetSaveDataFile(), FileMode.Open);
-			ArrayList list = (ArrayList) bf.Deserialize(file);
-			file.Close();
-
-			foreach (MapData md in list)
-			{
-				Debug.Log("MD pos:" + md.position + " sprite:" + md.sprite);
-				TileRenderer tr = (TileRenderer) Instantiate (tileRenderer);
-				tr.tile = new Vector3 (md.x, md.y);
-				tr.currentSprite = md.sprite;
-				tr.transform.parent = mapRoot.transform;
+    IEnumerator LoadMap()
+    {
 
 
-				if (tr.currentSprite == 3)
-				{
-					BlockFollower follower = tr.gameObject.AddComponent("BlockFollower") as BlockFollower;
-					follower.target = player;
-				}
+        ParseController.ListMapOperation list = new ParseController.ListMapOperation();
+        list.run();
+        while (!list.IsCompleted)
+            yield return null;
+        
+        foreach (ParseController.MapEntity map in list.result)
+        {
+            Debug.Log(map.parseObject.ObjectId);
+            foreach (ParseController.MapTile t in map.tiles) {
+                TileRenderer tr = (TileRenderer) Instantiate (tileRenderer);
+                tr.tile = new Vector3 (t.x, t.y);
+                tr.currentSprite = t.sprite;
+                tr.transform.parent = mapRoot.transform;
+                if (tr.currentSprite == 3)
+                {
+                    BlockFollower follower = tr.gameObject.AddComponent("BlockFollower") as BlockFollower;
+                    follower.target = player;
+                }
+                
+                
+                if (tr.currentSprite == 2)
+                {
+                    BlockFireballs fireballs = tr.gameObject.AddComponent("BlockFireballs") as BlockFireballs;
+                }
+                if (tr.currentSprite == 2)
+                {
+                    tr.gameObject.AddComponent("BlockFireballs");
+                }
+            }
+            //mapEntity = map;
+            break;
+        }
 
-
-				if (tr.currentSprite == 2)
-				{
-					tr.gameObject.AddComponent("BlockFireballs");
-				}
-			}
-		}
 	}
 
 	private void LoadBasicLevel()
