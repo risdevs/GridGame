@@ -52,7 +52,7 @@ public class ParseController : ParseInitializeBehaviour
                 this.tiles.Add(tile);
             }
             if (obj.ContainsKey("mapNumber"))
-                this.Number =  int.Parse(obj ["mapNumber"].ToString()); 
+                this.Number = int.Parse(obj ["mapNumber"].ToString()); 
             if (obj.ContainsKey("author"))
                 this.Author = obj ["author"].ToString(); 
             if (obj.ContainsKey("authorId"))
@@ -103,21 +103,24 @@ public class ParseController : ParseInitializeBehaviour
 
 
 
-    public static bool HasCompletedSinglePlayerLevel(int level) {
+    public static bool HasCompletedSinglePlayerLevel(int level)
+    {
         var l = GetCompletedSinglePlayerLevels();
         for (int i = 0; i < l.Count; i++)
         {
-            if (int.Parse(l[i].ToString())==level)
+            if (int.Parse(l [i].ToString()) == level)
                 return true;
         }
         return false;
     }
     
-    public static List<object> GetCompletedSinglePlayerLevels() {
+    public static List<object> GetCompletedSinglePlayerLevels()
+    {
         return ParseUser.CurrentUser.ContainsKey("splevels") ? ParseUser.CurrentUser.Get<List<object>>("splevels") : new List<object>();
     }
     
-    public static void CompleteSinglePlayerLevel(int level) {
+    public static void CompleteSinglePlayerLevel(int level)
+    {
         if (!HasCompletedSinglePlayerLevel(level))
         {
             var user = ParseUser.CurrentUser;
@@ -126,23 +129,26 @@ public class ParseController : ParseInitializeBehaviour
             user ["splevels"] = splevels;
             Debug.Log("BEFORE SAVE");
             
-            user.SaveAsync().ContinueWith( t => {
-                if (t.IsFaulted) {
-                    Debug.Log("FAULTED");
-                } else {
-                    Debug.Log("OK");
-                }
-            });
             var d = new Dictionary<int, bool>();
             foreach (var l in GetCompletedSinglePlayerLevels())
             {
-                d[int.Parse(l.ToString())] = true;
+                d [int.Parse(l.ToString())] = true;
             }
             user ["spscore"] = d.Keys.Count * SCORE_PER_SP_LEVEL;
+            user.SaveAsync().ContinueWith(t => {
+                if (t.IsFaulted)
+                {
+                    Debug.Log("FAULTED");
+                } else
+                {
+                    Debug.Log("OK");
+                }
+            });
         }
     }
     
-    public static void ClearCompletedLevels() {
+    public static void ClearCompletedLevels()
+    {
         var user = ParseUser.CurrentUser;
         user ["splevels"] = new List<object>();
         user.SaveAsync();
@@ -152,8 +158,7 @@ public class ParseController : ParseInitializeBehaviour
     {
         return ParseUser.CurrentUser.ContainsKey("spscore") ? int.Parse(ParseUser.CurrentUser.Get<object>("spscore").ToString()) : 0;
     }
-
-            
+         
     public override void Awake()
     {
         base.applicationID = "2QWerPx74sTKazgf92SYJuaMMP7jpOy0lB6fJ3NW";
@@ -184,6 +189,31 @@ public class ParseController : ParseInitializeBehaviour
 
 
 
+    public class GetRankingOperation
+    {
+        public List<ParseUser> result = new List<ParseUser>();
+        public bool IsCompleted = false;
+            
+        public void run()
+        {
+            Debug.Log("Running ranking");
+            ParseUser.Query.OrderByDescending("spscore").WhereGreaterThan("spscore",0).Limit(10).FindAsync().ContinueWith(t => {
+                if (t.IsFaulted) {
+                    Debug.Log("Ranking faulted");
+                } else {
+                    this.result = new List<ParseUser>();
+                    Debug.Log("Ranking OK");
+                    foreach (ParseUser obj in t.Result)
+                    {
+                        this.result.Add(obj);
+                    }
+                    Debug.Log("Ranking OK");
+                }
+                IsCompleted = true;
+            });
+        }
+    }
+        
     public class ListMapOperation
     {
         public List<MapEntity> result = new List<MapEntity>();

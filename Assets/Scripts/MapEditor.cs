@@ -284,6 +284,7 @@ public class MapEditor : MonoBehaviour
         // TODO: ANDRES obrir el joc amb el mapa que estem editant
         this.UpdateMapEntity();
         GameController.mapToLoad = MapEditor.mapEntity;
+        GameController.sceneToBack = Application.loadedLevel;
         Application.LoadLevel("Game");
     }
 
