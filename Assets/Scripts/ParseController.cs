@@ -1,30 +1,95 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using Parse;
 
-public class ParseController : ParseInitializeBehaviour{
+public class ParseController : ParseInitializeBehaviour
+{
 
+    public class MapEntity
+    {
+        public ParseObject parseObject;
+        public List<MapTile> tiles = new List<MapTile>();
 
-	public override void Awake() {
-		base.applicationID = "2QWerPx74sTKazgf92SYJuaMMP7jpOy0lB6fJ3NW";
-		base.dotnetKey = "JNKPfQqY2vhgk6CnDJsSgTorwgEeG4rQVaXbYbhd";
-		base.Awake();
-	}
+        public void Save() {
+            List<List<float>> list = new List<List<float>>();
+            foreach (MapTile t in tiles)
+            {
+                list.Add(new List<float>(){t.x, t.y, t.sprite});
+            }
 
-	public bool IsLoggedIn() {
-		return ParseUser.CurrentUser != null;
-	}
+            parseObject ["map"] = list;
+            parseObject.SaveAsync();
+        }
+    }
 
-	public void Login(string name) {
-		ParseUser.LogInAsync (name, "socialpoint").ContinueWith (t => {
-						if (t.IsFaulted || t.IsCanceled) {
-								// The login failed. Check the error to see why.
-						} else {
-								// Login was successful.
-						}
-				});
-	}
+    public class MapTile
+    {
+        public float x;
+        public float y;
+        public int sprite;
+    }
 
-	public void Register(string name) {
-	}
+    public override void Awake()
+    {
+        base.applicationID = "2QWerPx74sTKazgf92SYJuaMMP7jpOy0lB6fJ3NW";
+        base.dotnetKey = "JNKPfQqY2vhgk6CnDJsSgTorwgEeG4rQVaXbYbhd";
+        base.Awake();
+    }
+
+    public bool IsLoggedIn()
+    {
+        return ParseUser.CurrentUser != null;
+    }
+
+    public IEnumerator<bool> Login(string name)
+    {
+        var task = ParseUser.LogInAsync(name, "socialpoint");
+        while (!task.IsCompleted)
+            yield return false;
+
+        if (task.IsFaulted || task.IsCanceled)
+        {
+            // The login failed. Check the error to see why.
+        } else
+        {
+            // Login was successful.
+        }
+        yield return true;
+    }
+
+    public void Register(string name)
+    {
+    }
+
+    public class ListMapOperation {
+        public List<MapEntity> result;
+
+        public bool IsCompleted = false;
+
+        public void run()
+        {
+            ParseObject.GetQuery("MapBytes").FindAsync().ContinueWith(t => {
+                result = new List<MapEntity>();
+                foreach (ParseObject obj in t.Result)
+                {
+                    MapEntity map = new MapEntity();
+                    map.parseObject = obj;
+                    foreach (object tileobj in obj.Get<List<object>>("map"))
+                    {
+                        List<object> tileList = (List<object>)tileobj;
+                        MapTile tile = new MapTile();
+                        tile.x = float.Parse(tileList [0].ToString());
+                        tile.y = float.Parse(tileList [1].ToString());
+                        tile.sprite = int.Parse(tileList [2].ToString());
+                        map.tiles.Add(tile);
+                    }
+                    result.Add(map);
+                }
+                IsCompleted = true;
+            });
+
+        }
+    }
+
 }
