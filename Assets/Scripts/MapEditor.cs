@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using UnityEngine.UI;
 using Parse;
 
 public class MapEditor : MonoBehaviour
@@ -19,6 +20,8 @@ public class MapEditor : MonoBehaviour
 	public TileRenderer tilePrefab;
 	public GameObject mapRoot;
 
+    public Button tileButtonPrefab;
+
 	private GridRendering gridRendering;
 
 	private TileRenderer[] tiles;
@@ -32,8 +35,21 @@ public class MapEditor : MonoBehaviour
         gridRendering = Camera.main.GetComponent<GridRendering> ();
 		tiles = new TileRenderer[GridRendering.COLS * GridRendering.ROWS];
         mapEntity = new ParseController.MapEntity();
-        //StartCoroutine("LoadMap");
+        StartCoroutine("LoadMap");
+
+        LoadUI();
 	}
+
+    private void LoadUI()
+    {
+        Button b;
+        for (int i = 0; i < sprites.Length; i++)
+        {
+            b = Instantiate(tileButtonPrefab) as Button;
+            b.GetComponent<Image>().sprite = sprites[i];
+            //b.transform.Translate(new Vector3(0, 50));
+        }
+    }
 
 
     IEnumerator LoadMap() {
@@ -192,6 +208,8 @@ public class MapEditor : MonoBehaviour
 		selectedTile++;
 		selectedTile %= sprites.Length;
 		b.GetComponentInChildren<UnityEngine.UI.Text> ().text = "" + selectedTile;
+
+        b.GetComponent<Image>().sprite = sprites [selectedTile];
 	}
 
 	public void SaveMap()
