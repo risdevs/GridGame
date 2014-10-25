@@ -21,6 +21,7 @@ public class MapEditor : MonoBehaviour
 	public GameObject mapRoot;
 
     public Button tileButtonPrefab;
+    public Canvas mainCanvas;
 
 	private GridRendering gridRendering;
 
@@ -42,12 +43,23 @@ public class MapEditor : MonoBehaviour
 
     private void LoadUI()
     {
+        Resolution res = Screen.currentResolution;
         Button b;
         for (int i = 0; i < sprites.Length; i++)
         {
             b = Instantiate(tileButtonPrefab) as Button;
             b.GetComponent<Image>().sprite = sprites[i];
-            //b.transform.Translate(new Vector3(0, 50));
+            b.transform.parent = mainCanvas.transform;
+            b.transform.Translate(new Vector3(res.width * 0.05f + (sprites[i].bounds.size.x + 10) * 5 * i, res.height * 0.3f));
+            b.transform.localScale = new Vector3(5,5);
+
+
+            int j = i;
+            b.onClick.AddListener (delegate () {
+                Debug.Log("sprite:" + j);
+
+                selectedTile = j;
+            });
         }
     }
 
@@ -167,14 +179,16 @@ public class MapEditor : MonoBehaviour
 		
 		int xy = ((int)tile.y) * GridRendering.COLS + ((int)tile.x);
 		
-		if (tiles[xy] == null)
-		{
-			TileRenderer tr = (TileRenderer)Instantiate(tilePrefab);
-			tr.tile = tile;
-			tr.transform.parent = mapRoot.transform;
-			tr.currentSprite = selectedTile;
-            tiles[xy] = tr;
+
+		if (tiles [xy] != null)
+        {
+            DeleteTile(tile.x, tile.y);
         }
+		TileRenderer tr = (TileRenderer)Instantiate(tilePrefab);
+		tr.tile = tile;
+		tr.transform.parent = mapRoot.transform;
+		tr.currentSprite = selectedTile;
+        tiles[xy] = tr;
 	}
 	
 	private void RemoveTile()
@@ -202,15 +216,6 @@ public class MapEditor : MonoBehaviour
         tr.transform.parent = null;
         Destroy (tr.gameObject);
     }
-
-	public void ChangeTile(UnityEngine.UI.Button b)
-	{
-		selectedTile++;
-		selectedTile %= sprites.Length;
-		b.GetComponentInChildren<UnityEngine.UI.Text> ().text = "" + selectedTile;
-
-        b.GetComponent<Image>().sprite = sprites [selectedTile];
-	}
 
 	public void SaveMap()
 	{
