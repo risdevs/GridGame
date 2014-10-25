@@ -144,4 +144,9 @@ public class MapEditor : MonoBehaviour
 			b.GetComponentInChildren<UnityEngine.UI.Text> ().text = "BUILD";
 		}
 	}
+
+	public void BackToMainMenu()
+	{
+		Application.LoadLevel("Main");
+	}
 }
