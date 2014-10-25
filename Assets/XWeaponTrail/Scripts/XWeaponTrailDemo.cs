@@ -11,11 +11,15 @@ public class XWeaponTrailDemo : MonoBehaviour
     public XWeaponTrail ProTrailDistort;
     public XWeaponTrail ProTrailShort;
     public XWeaponTrail ProTraillong;
-
-
     public XWeaponTrail SimpleTrail;
 
+	public UnityEngine.UI.Text creditsText;
 
+
+	string message;
+	public float letterPause = 0.1f;
+	public float betweenNamesPause = 0.3f;
+	public AudioClip sound;
 
     //pre-init to save some performance.
     public void Start()
@@ -31,16 +35,65 @@ public class XWeaponTrailDemo : MonoBehaviour
 		
 		SwordAnimation.Play();
 		SimpleTrail.Activate();
-			
+
+
+		// TEXT ANIMATION
+		message = creditsText.text;
+
+			creditsText.text = "";
+			message = "Sergi Velez";
+			StartCoroutine (TypeText ());
+
 	}
-	
-	
-	
+
+	IEnumerator TypeText () {
+		foreach (char letter in message.ToCharArray()) {
+			creditsText.text += letter;
+			//if (sound) audio.PlayOneShot (sound);
+			yield return 0;
+			yield return new WaitForSeconds (letterPause);
+		}      
+		yield return new WaitForSeconds (betweenNamesPause);
+
+
+		creditsText.text = "";
+		message = "Marc Canaleta";
+		foreach (char letter in message.ToCharArray()) {
+			creditsText.text += letter;
+			//if (sound) audio.PlayOneShot (sound);
+			yield return 0;
+			yield return new WaitForSeconds (letterPause);
+		}
+		yield return new WaitForSeconds (betweenNamesPause);
+
+		creditsText.text = "";
+		message = "Horacio Martos";
+		foreach (char letter in message.ToCharArray()) {
+			creditsText.text += letter;
+			//if (sound) audio.PlayOneShot (sound);
+			yield return 0;
+			yield return new WaitForSeconds (letterPause);
+		}
+		yield return new WaitForSeconds (betweenNamesPause);
+
+		creditsText.text = "";
+		message = "Andres Bou";
+		foreach (char letter in message.ToCharArray()) {
+			creditsText.text += letter;
+			//if (sound) audio.PlayOneShot (sound);
+			yield return 0;
+			yield return new WaitForSeconds (letterPause);
+		}
+		yield return new WaitForSeconds (betweenNamesPause);
+
+	}
+
 	void OnGUI()
 	{
 
         //GUI.Label(new Rect(60, 0, 500, 30), "Pro example requires unity Pro.");
 
+		/*
         if (GUI.Button(new Rect(0, 0, 150, 30), "Activate Trail1"))
         {
 
@@ -83,6 +136,8 @@ public class XWeaponTrailDemo : MonoBehaviour
             ProTrailShort.StopSmoothly(0.3f);
             ProTraillong.StopSmoothly(0.3f);
         }
+        */
+
     }
 
 }
