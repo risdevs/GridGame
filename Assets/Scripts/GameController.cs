@@ -165,7 +165,7 @@ public class GameController : MonoBehaviour
     
     IEnumerator YouWin()
     {
-        ParseController.CompleteSinglePlayerLevel(mapToLoad.Number);
+        ParseController.CompleteLevel(mapToLoad.Author, mapToLoad.Number);
         yield return new WaitForSeconds(1.5f);
         Application.LoadLevel("Main");
     }

@@ -19,7 +19,6 @@ public class ParseController : ParseInitializeBehaviour
         // new map
         public MapEntity(int Number, string userName)
         {
-            parseObject = new ParseObject("MapBytes");
             this.Number = Number;
             this.Author = userName;
         }
@@ -61,6 +60,10 @@ public class ParseController : ParseInitializeBehaviour
         
         public void Save()
         {
+            if (this.parseObject == null)
+            {
+                this.parseObject = new ParseObject("MapBytes");
+            }
             List<List<float>> list = new List<List<float>>();
             foreach (MapTile t in tiles)
             {
@@ -84,11 +87,19 @@ public class ParseController : ParseInitializeBehaviour
         {
             if (this.parseObject == null)
             {
-                return "Single Player " + this.GetNumber();
+                if (this.Author == null) {
+                    return "Single Player " + this.GetNumber();
+                } else {
+                    return "Create New Map (" + this.GetNumber() + ")";
+                }
             } else
             {
                 return this.Author + " " + this.GetNumber();
             }
+        }
+
+        public bool HasBeenCompleted() {
+            return ParseController.HasCompletedLevel(this.Author, this.Number);
         }
 
 
@@ -103,38 +114,56 @@ public class ParseController : ParseInitializeBehaviour
 
 
 
-    public static bool HasCompletedSinglePlayerLevel(int level)
+    public static bool HasCompletedLevel(string author, int level)
     {
-        var l = GetCompletedSinglePlayerLevels();
-        for (int i = 0; i < l.Count; i++)
+        if (author == null)
+            author = "";
+        var levels = GetCompletedLevels();
+        foreach (object l in levels)
         {
-            if (int.Parse(l [i].ToString()) == level)
+            List<object> lobj = (List<object>)l;
+            var lauthor = lobj [0].ToString();
+            var lnumber = int.Parse(lobj [1].ToString());
+            if (lauthor == author && level == lnumber) {
                 return true;
+            }
         }
         return false;
+
     }
     
-    public static List<object> GetCompletedSinglePlayerLevels()
+    public static List<object> GetCompletedLevels()
     {
-        return ParseUser.CurrentUser.ContainsKey("splevels") ? ParseUser.CurrentUser.Get<List<object>>("splevels") : new List<object>();
+        return ParseUser.CurrentUser.ContainsKey("levels") ? ParseUser.CurrentUser.Get<List<object>>("levels") : new List<object>();
     }
     
-    public static void CompleteSinglePlayerLevel(int level)
+    public static void CompleteLevel(string author, int level)
     {
-        if (!HasCompletedSinglePlayerLevel(level))
+        if (author == null)
+            author = "";
+        if (!HasCompletedLevel(author, level))
         {
             var user = ParseUser.CurrentUser;
-            var splevels = GetCompletedSinglePlayerLevels();
-            splevels.Add(level);
-            user ["splevels"] = splevels;
+            var levels = GetCompletedLevels();
+            levels.Add(new List<object>(){author, level});
+            user ["levels"] = levels;
             Debug.Log("BEFORE SAVE");
-            
-            var d = new Dictionary<int, bool>();
-            foreach (var l in GetCompletedSinglePlayerLevels())
+
+            int scoresingle = 0;
+            int scoremulti = 0;
+            foreach (object l in levels)
             {
-                d [int.Parse(l.ToString())] = true;
+                List<object> lobj = (List<object>)l;
+                var lauthor = lobj [0].ToString();
+                var lnumber = int.Parse(lobj [1].ToString());
+                if (lauthor == null || lauthor == "") {
+                    scoresingle += SCORE_PER_SP_LEVEL;
+                } else {
+                    scoremulti += SCORE_PER_SP_LEVEL;
+                }
             }
-            user ["spscore"] = d.Keys.Count * SCORE_PER_SP_LEVEL;
+            user ["spscore"] = scoresingle;
+            user ["mpscore"] = scoremulti;
             user.SaveAsync().ContinueWith(t => {
                 if (t.IsFaulted)
                 {
@@ -194,10 +223,11 @@ public class ParseController : ParseInitializeBehaviour
         public List<ParseUser> result = new List<ParseUser>();
         public bool IsCompleted = false;
             
-        public void run()
+        public void run(bool multiplayer = false)
         {
+            string sortfield = multiplayer ? "mpscore" : "spscore";
             Debug.Log("Running ranking");
-            ParseUser.Query.OrderByDescending("spscore").WhereGreaterThan("spscore",0).Limit(10).FindAsync().ContinueWith(t => {
+            ParseUser.Query.OrderByDescending(sortfield).WhereGreaterThan(sortfield,0).Limit(10).FindAsync().ContinueWith(t => {
                 if (t.IsFaulted) {
                     Debug.Log("Ranking faulted");
                 } else {

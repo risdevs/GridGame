@@ -101,7 +101,7 @@ public class MultiplayerController : MonoBehaviour {
         bool done = map != null;
         buttons [i].GetComponentInChildren<UnityEngine.UI.Text>().text =  text;
         buttons [i].enabled = map != null;
-        flags [i].enabled = map != null && ParseController.HasCompletedSinglePlayerLevel(map.Number);
+        flags [i].enabled = map != null && map.HasBeenCompleted();
     }
                        
 
