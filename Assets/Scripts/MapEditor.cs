@@ -245,9 +245,9 @@ public class MapEditor : MonoBehaviour
         Destroy (tr.gameObject);
     }
 
-	public void SaveMap()
-	{
+    public void UpdateMapEntity() {
         mapEntity.tiles.Clear();
+        Debug.Log("TILE: " + tiles.Length);
         for(int i = 0; i < tiles.Length; i++)
         {
             if(tiles[i] != null)
@@ -259,6 +259,11 @@ public class MapEditor : MonoBehaviour
                 mapEntity.tiles.Add(t);
             }
         }
+    }
+
+	public void SaveMap()
+	{
+        UpdateMapEntity();
         mapEntity.Save();
 
 	}
@@ -282,6 +287,9 @@ public class MapEditor : MonoBehaviour
     public void PlayLevel()
     {
         // TODO: ANDRES obrir el joc amb el mapa que estem editant
+        this.UpdateMapEntity();
+        GameController.mapToLoad = MapEditor.mapEntity;
+        Application.LoadLevel("Game");
     }
 
     public void PrintMatrix()

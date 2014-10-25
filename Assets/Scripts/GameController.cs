@@ -20,6 +20,7 @@ public class GameController : MonoBehaviour
     {
         if (mapToLoad == null)
         {
+            Debug.Log("NULL");
             mapToLoad = new ParseController.MapEntity(1);
         }
         foreach (ParseController.MapTile t in mapToLoad.tiles) {
