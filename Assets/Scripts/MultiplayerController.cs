@@ -52,21 +52,22 @@ public class MultiplayerController : MonoBehaviour {
 		listMaps = new ParseController.ListMapOperation();
 		listMaps.run();
 		while (!listMaps.IsCompleted) yield return null;
+        Debug.Log("load complete");
 
 		countNumMaps ();
 		loadMapButtons ();
 	}
 
 	void initMapsSPM () {
-		listLevelsSPM.Add(new ParseController.MapEntity("hahaha",new int[,]
+		listLevelsSPM.Add(new ParseController.MapEntity(1,new int[,]
 		                                   {{1,2,1},{1,6,2}}
 		));
 		
-		listLevelsSPM.Add(new ParseController.MapEntity("zzzzz",new int[,]
+		listLevelsSPM.Add(new ParseController.MapEntity(2,new int[,]
 		                                         {{1,2,1},{1,2,2}}
 		));
 		
-		listLevelsSPM.Add(new ParseController.MapEntity("xxxxx",new int[,]
+		listLevelsSPM.Add(new ParseController.MapEntity(3,new int[,]
 		                                         {{1,2,1},{1,2,2}}
 		));
 
@@ -124,13 +125,13 @@ public class MultiplayerController : MonoBehaviour {
 
 				if(numButton==0) { 
 					map1=map;
-					textLev1.text = "Map "+(numCurrentMap+1)+" "+map.id;
+					textLev1.text =  map.GetTitle();
 				} else if (numButton==1) { 
 					map2=map;
-					textLev2.text = "Map "+(numCurrentMap+1)+" "+map.id;
+                    textLev2.text =  map.GetTitle();
 				} else if (numButton==2) { 
 					map3=map;
-					textLev3.text = "Map "+(numCurrentMap+1)+" "+map.id;
+                    textLev3.text =  map.GetTitle();
 				}
 			}
 		

@@ -20,7 +20,7 @@ public class GameController : MonoBehaviour
     {
         if (mapToLoad == null)
         {
-            mapToLoad = new ParseController.MapEntity();
+            mapToLoad = new ParseController.MapEntity(1);
         }
         foreach (ParseController.MapTile t in mapToLoad.tiles) {
             TileRenderer tr = (TileRenderer) Instantiate (tileRenderer);

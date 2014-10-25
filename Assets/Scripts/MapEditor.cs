@@ -27,7 +27,7 @@ public class MapEditor : MonoBehaviour
 
 	private TileRenderer[] tiles;
 
-    private ParseController.MapEntity mapEntity;
+    static private ParseController.MapEntity mapEntity;
 
     	// Use this for initialization
 	void Start ()
@@ -35,7 +35,7 @@ public class MapEditor : MonoBehaviour
         Debug.Log("START");
         gridRendering = Camera.main.GetComponent<GridRendering> ();
 		tiles = new TileRenderer[GridRendering.COLS * GridRendering.ROWS];
-        mapEntity = new ParseController.MapEntity();
+        mapEntity = new ParseController.MapEntity(1);
         StartCoroutine("LoadMap");
 
         LoadUI();
@@ -68,7 +68,7 @@ public class MapEditor : MonoBehaviour
         Debug.Log("LOADMAP");
 
         ParseController.ListMapOperation list = new ParseController.ListMapOperation();
-        list.run();
+        list.run(false);
         while (!list.IsCompleted)
             yield return null;
             
