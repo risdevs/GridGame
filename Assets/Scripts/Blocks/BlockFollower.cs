@@ -14,6 +14,8 @@ public class BlockFollower : MonoBehaviour
     void Start()
     {
 		gridRendering = Camera.main.GetComponent<GridRendering> ();
+		gameObject.layer = (int)Utils.LAYERS.Triggers;
+		GetComponent<BoxCollider2D> ().isTrigger = true;
     }
     
     // Update is called once per frame
@@ -22,7 +24,6 @@ public class BlockFollower : MonoBehaviour
 		//gridRendering.WorldToTile (target.transform.position);
 		targetPosition = target.transform.position;
 		UpdatePosition ();
-
     }
 
     void UpdatePosition()

@@ -3,6 +3,14 @@ using System.Collections;
 
 public class Utils {
 
+	public enum LAYERS
+	{
+		Default = 0,
+		Player = 8,
+		OneWayPlatform = 9,
+		Triggers = 10
+	}
+
 	public static string GetiPhoneDocumentsPath () 
 	{ 
 		// Your game has read+write access to /var/mobile/Applications/XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX/Documents 
