@@ -10,17 +10,22 @@ public class GameController : MonoBehaviour
 	public TileRenderer tileRenderer;
 	public GameObject mapRoot;
 	public GameObject player;
+    
+    public UnityEngine.UI.Button b;
 
     // Use this for initialization
     void Start()
-	{
-		//LoadBasicLevel ();
-        StartCoroutine("LoadMap");
+      	{
     }
     
     // Update is called once per frame
     void Update()
     {
+    }
+
+    public void clickDown()
+    {
+        Debug.Log("clickDown");
     }
 
     IEnumerator LoadMap()

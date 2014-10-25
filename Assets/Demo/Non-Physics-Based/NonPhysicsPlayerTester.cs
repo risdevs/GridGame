@@ -19,13 +19,14 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 	private Animator _animator;
 	private RaycastHit2D _lastControllerColliderHit;
 	private Vector3 _velocity;
+  
 
-
-	public GameObject LeftControl;
-	public GameObject RightControl;
-	public GameObject JumpControl;
-	
-	void Awake()
+    
+    bool RightPressed = false;
+    bool LeftPressed = false;
+    bool JumpPressed = false;
+    
+    void Awake()
 	{
 		_animator = GetComponent<Animator>();
 		_controller = GetComponent<CharacterController2D>();
@@ -106,10 +107,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 
 	// the Update loop contains a very simple example of moving the character around and controlling the animation
 	void Update()
-	{
-		bool RightPressed = false;
-		bool LeftPressed = false;
-		bool JumpPressed = false;
+     {
 
 		if( Input.GetKey( KeyCode.RightArrow )) {
 			RightPressed = true;
@@ -182,4 +180,21 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 		_controller.move( _velocity * Time.deltaTime );
 	}
 
+
+    public void setLeftDown(bool down)
+    {
+        LeftPressed = down;
+    }
+    
+    
+    public void setRightDown(bool down)
+    {
+        RightPressed = down;
+    }
+    
+    
+    public void setJumpDown(bool down)
+    {
+        JumpPressed = down;
+    }
 }
