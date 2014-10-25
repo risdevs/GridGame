@@ -15,6 +15,9 @@ public class XWeaponTrailDemo : MonoBehaviour
 
 	public UnityEngine.UI.Text creditsText;
 
+	public UnityEngine.UI.Button backButton;
+
+
 
 	string message;
 	public float letterPause = 0.1f;
@@ -87,6 +90,12 @@ public class XWeaponTrailDemo : MonoBehaviour
 		yield return new WaitForSeconds (betweenNamesPause);
 
 	}
+
+
+	public void goBack() {
+		Application.LoadLevel("Main");
+	}
+
 
 	void OnGUI()
 	{
