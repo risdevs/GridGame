@@ -27,7 +27,7 @@ public class GridRendering : MonoBehaviour
 		
 		tileSize = (xEnd - xStart) / COLS;
 
-		yEnd *= 0.9f;
+		yEnd *= 0.8f;
 		yStart = yEnd - ((ROWS) * tileSize);
 	}
 
