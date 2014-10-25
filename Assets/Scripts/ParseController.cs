@@ -10,13 +10,16 @@ public class ParseController : ParseInitializeBehaviour
     {
         public ParseObject parseObject;
         public List<MapTile> tiles = new List<MapTile>();
+		public string id;
 
         public MapEntity() {
             parseObject = new ParseObject("MapBytes");
         }
 
-        public MapEntity(int[,] data) {
-            for (int i = 0; i < data.GetLength(0); i++) {
+		// create from spm
+        public MapEntity(string id, int[,] data) {
+			this.id=id;
+			for (int i = 0; i < data.GetLength(0); i++) {
                 MapTile tile = new MapTile();
                 tile.x = data[i,0];
                 tile.y = data[i,1];
@@ -25,7 +28,9 @@ public class ParseController : ParseInitializeBehaviour
             }
         }
 
+		// CREATE FROM MULTIPLAYER
         public MapEntity(ParseObject obj) {
+			this.id = this.parseObject.ObjectId;
             this.parseObject = obj;
             foreach (object tileobj in obj.Get<List<object>>("map"))
             {
@@ -48,6 +53,13 @@ public class ParseController : ParseInitializeBehaviour
             parseObject ["map"] = list;
             parseObject.SaveAsync();
         }
+
+		public string GetUser() {
+			return null;
+ 		}
+		public string getId() {
+			return this.id;
+		}
     }
 
     public class MapTile

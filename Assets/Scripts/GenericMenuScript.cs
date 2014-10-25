@@ -16,4 +16,9 @@ public class GenericMenuScript : MonoBehaviour {
 	public void OpenScene(string scene) {
 		Application.LoadLevel(scene);
 	}
+
+	public void loadListOfMaps(string mode) {
+		MultiplayerController.mode = mode;
+		Application.LoadLevel ("MultiPlayerMenu");
+	}
 }
