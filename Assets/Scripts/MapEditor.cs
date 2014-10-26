@@ -169,9 +169,25 @@ public class MapEditor : MonoBehaviour
         TileRenderer tr;
         int xy;
 
+        
+        tr = (TileRenderer) Instantiate (tilePrefab);
+        tr.tile = new Vector3 (0,0);
+        tr.currentSprite = 1;
+        tr.transform.parent = mapRoot.transform;
+        xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
+        tiles[xy] = tr;
+
+        
+        tr = (TileRenderer) Instantiate (tilePrefab);
+        tr.tile = new Vector3 (GridRendering.COLS - 1,0);
+        tr.currentSprite = 1;
+        tr.transform.parent = mapRoot.transform;
+        xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
+        tiles[xy] = tr;
 
         for (int i = 0; i < GridRendering.COLS; i++)
         {
+            /*
             tr = (TileRenderer) Instantiate (tilePrefab);
             tr.tile = new Vector3 (i,0);
             tr.currentSprite = 1;
@@ -179,7 +195,7 @@ public class MapEditor : MonoBehaviour
             xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
             tiles[xy] = tr;
 
-            /*
+
             tr = (TileRenderer) Instantiate (tilePrefab);
             tr.tile = new Vector3 (i,-1);
             tr.currentSprite = 0;
