@@ -28,7 +28,7 @@ public class BlockMover : MonoBehaviour
             UpdateDestination();
         } 
 
-        Debug.Log("Mover position:" + transform.position + " Target position:" + targetPosition);
+        //Debug.Log("Mover position:" + transform.position + " Target position:" + targetPosition);
 
         transform.position = transform.position + direction * speed;
     }

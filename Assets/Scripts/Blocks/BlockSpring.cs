@@ -15,12 +15,9 @@ public class BlockSpring : MonoBehaviour
     void Update()
     {
         Vector3 dist = player.transform.position - this.transform.position;
-        if (Mathf.Abs(dist.x) < 1 && dist.y > 1 && dist.y < 2)
+        if (Mathf.Abs(dist.x) < 1 && dist.y > 1 && dist.y < 1.5)
         {
             player.GetComponent<NonPhysicsPlayerTester>().spring = true;
-        } else
-        {
-            player.GetComponent<NonPhysicsPlayerTester>().spring = false;
         }
           
     }

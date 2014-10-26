@@ -150,7 +150,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 		}
 
 
-		// we can only jump whilst grounded
+        // we can only jump whilst grounded
 		if(( _controller.isGrounded && (JumpPressed || JumpOver)) || spring)
 		{
             Debug.Log("Jump Height:" + jumpHeight);
@@ -167,6 +167,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 		_velocity.y += gravity * Time.deltaTime;
 
 		_controller.move( _velocity * Time.deltaTime );
+        spring = false;
 	}
 
 
