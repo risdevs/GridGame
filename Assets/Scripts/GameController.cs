@@ -137,7 +137,7 @@ public class GameController : MonoBehaviour
                 tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
             }
 
-            if (tr.currentSprite == 0)
+            if (tr.currentSprite == 5)
             {
                 tr.gameObject.name = Utils.NAME_TILE_END_FLAG;
                 tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
@@ -155,7 +155,7 @@ public class GameController : MonoBehaviour
     {
         TileRenderer tr;
         
-        
+        /*
         //Create end flag
         tr = (TileRenderer) Instantiate (tileRenderer);
         tr.tile = new Vector3 (GridRendering.COLS - 1, 1);
@@ -165,7 +165,7 @@ public class GameController : MonoBehaviour
         tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
         tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
 
-
+*/
         
         for (int i = 0; i < GridRendering.COLS; i++)
         {
