@@ -15,6 +15,7 @@ public class BlockKoopa : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        Debug.Log("koopa!!");
         gridRendering = Camera.main.GetComponent<GridRendering> ();
 
         tileRenderer = GetComponent<TileRenderer>();
@@ -44,11 +45,10 @@ public class BlockKoopa : MonoBehaviour
         {
             left = !left;
             UpdateDirection();
-        } else
-        {
-            transform.position = transform.position + direction * speed;
-            tileRenderer.tile = gridRendering.WorldToTile(transform.position);
         }
+ 
+        transform.position = transform.position + direction * speed;
+        tileRenderer.tile = gridRendering.WorldToTile(transform.position);
 
     }
 
@@ -68,6 +68,9 @@ public class BlockKoopa : MonoBehaviour
 
         int xy = ((int)tile.y) * GridRendering.COLS + ((int)tile.x);
 
-        return gameController.tiles [xy] != null;
+        Debug.Log("Koopa Tile:" + gameController.tiles [xy]);
+        Debug.Log("Koopa:" + this);
+
+        return gameController.tiles [xy] != null && gameController.tiles[xy] != tileRenderer;
     }
 }

@@ -138,8 +138,21 @@ public class GameController : MonoBehaviour
                 tr.gameObject.name = Utils.NAME_COIN;
                 tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
                 tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+                
             }
-
+            
+            if (tr.currentSprite == 19)
+               {
+                BlockKoopa koopa = tr.gameObject.AddComponent<BlockKoopa>() as BlockKoopa;
+                koopa.gameController = this;
+                /*
+                tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
+                tr.name = Utils.NAME_ENEMY_FOLLOWER;
+                tr.GetComponent<BoxCollider2D>().isTrigger = true;
+                tr.GetComponent<SpriteRenderer>().sortingOrder = 1;*/
+                
+            }
+            
             if (tr.currentSprite == 5)
             {
                 tr.gameObject.name = Utils.NAME_TILE_END_FLAG;
@@ -245,7 +258,7 @@ public class GameController : MonoBehaviour
         }
 
         if (name == Utils.NAME_TILE_DEAD || name == Utils.NAME_ENEMY_FOLLOWER ||
-            name == Utils.NAME_ENEMY_FIREBALL /*|| name == Utils.NAME_ENEMY_KOOPA*/)
+            name == Utils.NAME_ENEMY_FIREBALL || name == Utils.NAME_ENEMY_KOOPA)
         {
             Debug.Log("YOU DIE");
             gameText.text = "YOU DIE";
