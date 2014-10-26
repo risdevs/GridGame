@@ -221,7 +221,21 @@ UnityEngine.EventSystems.EventSystem:Update()
         prevButton.enabled = numPage > 0;
         nextButton.enabled = (numPage + 1) * numButtonsPerPage < mapList.Count;
 
-        levelCountText.text = "Levels: " + mapList.Count;
+        if (mode == "mapeditor")
+        {
+            levelCountText.enabled = false;
+        } else
+        {
+            levelCountText.enabled = true;
+            int completedCount = 0;
+            foreach (ParseController.MapEntity map in mapList)
+            {
+                if (map.HasBeenCompleted())
+                    completedCount++;
+            }
+
+            levelCountText.text = "Levels completed: " + completedCount + "/" + mapList.Count;
+        }
     }
 
    

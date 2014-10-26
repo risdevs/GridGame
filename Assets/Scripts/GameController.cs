@@ -159,7 +159,7 @@ public class GameController : MonoBehaviour
                 tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
                 tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
             }
-            
+
             xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
             tiles[xy] = tr;
         }
