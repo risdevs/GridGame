@@ -175,7 +175,13 @@ public class MapEditor : MonoBehaviour
         tr.currentSprite = 1;
         tr.transform.parent = mapRoot.transform;
         xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
-        tiles[xy] = tr;
+        if (tiles [xy] == null)
+        {
+            tiles [xy] = tr;
+        } else
+        {
+            Destroy(tr.gameObject);
+        }
 
         
         tr = (TileRenderer) Instantiate (tilePrefab);
@@ -183,7 +189,14 @@ public class MapEditor : MonoBehaviour
         tr.currentSprite = 1;
         tr.transform.parent = mapRoot.transform;
         xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
-        tiles[xy] = tr;
+        if (tiles [xy] == null)
+        {
+            tiles [xy] = tr;
+        } else
+        {
+            Destroy(tr.gameObject);
+        }
+
 
         for (int i = 0; i < GridRendering.COLS; i++)
         {
