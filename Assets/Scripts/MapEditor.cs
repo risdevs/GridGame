@@ -17,6 +17,7 @@ public class MapEditor : MonoBehaviour
 
 	public UnityEngine.UI.Button printButton;
 	public UnityEngine.UI.Button playButton;
+    public UnityEngine.UI.Button modeButton;
 
 	public MODE currentMode;
 
@@ -44,6 +45,7 @@ public class MapEditor : MonoBehaviour
         sprites = tilePrefab.sprites;
 
 
+        bool hasFlag = false;
         LoadUI();
         foreach (ParseController.MapTile t in mapEntity.tiles) {
             TileRenderer tr = (TileRenderer) Instantiate (tilePrefab);
@@ -57,7 +59,30 @@ public class MapEditor : MonoBehaviour
                 DeleteTile(t.x, t.y);
             }
             tiles[xy] = tr;
+
+            if(t.sprite == 5) hasFlag = true;
         }
+
+        
+        //Create end flag
+        if (!hasFlag)
+        {
+            TileRenderer tr = (TileRenderer)Instantiate(tilePrefab);
+            tr.tile = new Vector3(GridRendering.COLS - 1, 1);
+            tr.currentSprite = 5;
+            tr.transform.parent = mapRoot.transform;
+            tr.gameObject.name = Utils.NAME_TILE_END_FLAG;
+            tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
+            tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+            
+            int xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
+            if (tiles [xy] != null)
+            {
+                DeleteTile(tr.tile.x, tr.tile.y);
+            }
+            tiles [xy] = tr;
+        }
+
         SetupLevel();
     }
 
@@ -83,6 +108,10 @@ public class MapEditor : MonoBehaviour
                 Debug.Log("sprite:" + j);
                 
                 selectedTile = j;
+                if (currentMode == MODE.DELETE)
+                {
+                    SwitchMode(modeButton);
+                }
             });
         }
     }
@@ -140,23 +169,6 @@ public class MapEditor : MonoBehaviour
         TileRenderer tr;
         int xy;
 
-        
-        //Create end flag
-        tr = (TileRenderer) Instantiate (tilePrefab);
-        tr.tile = new Vector3 (GridRendering.COLS - 1, 1);
-        tr.currentSprite = 5;
-        tr.transform.parent = mapRoot.transform;
-        tr.gameObject.name = Utils.NAME_TILE_END_FLAG;
-        tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
-        tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
-
-        xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
-        if(tiles[xy] != null)
-        {
-            DeleteTile(tr.tile.x, tr.tile.y);
-        }
-        tiles[xy] = tr;
-
 
         for (int i = 0; i < GridRendering.COLS; i++)
         {
@@ -164,6 +176,8 @@ public class MapEditor : MonoBehaviour
             tr.tile = new Vector3 (i,0);
             tr.currentSprite = 1;
             tr.transform.parent = mapRoot.transform;
+            xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
+            tiles[xy] = tr;
 
             /*
             tr = (TileRenderer) Instantiate (tilePrefab);
@@ -182,6 +196,7 @@ public class MapEditor : MonoBehaviour
             tr.transform.parent = mapRoot.transform;
             */
         }
+
         /*
         for (int i = 0; i < GridRendering.ROWS; i++)
         {
@@ -224,6 +239,14 @@ public class MapEditor : MonoBehaviour
             DeleteTile(tile.x, tile.y);
         }
         tiles[xy] = tr;
+
+
+        if (selectedTile == 5)
+        {
+            tr.gameObject.name = Utils.NAME_TILE_END_FLAG;
+            tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
+            tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+        }
 	}
 	
 	private void RemoveTile()
@@ -281,15 +304,15 @@ public class MapEditor : MonoBehaviour
 		if (currentMode == MODE.BUILD)
 		{
 			currentMode = MODE.DELETE;
-			b.GetComponentInChildren<UnityEngine.UI.Text> ().text = "DELETE";
+			b.GetComponentInChildren<UnityEngine.UI.Text> ().text = "BUILD";
 		} else {
 			currentMode = MODE.BUILD;
-			b.GetComponentInChildren<UnityEngine.UI.Text> ().text = "BUILD";
+			b.GetComponentInChildren<UnityEngine.UI.Text> ().text = "DELETE";
 		}
   	}
     public void BackToMainMenu()
 	{
-		Application.LoadLevel("MultiPlayerMenu");
+		Application.LoadLevel("Main");
 	}
 
     public void PlayLevel()

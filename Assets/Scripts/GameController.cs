@@ -123,14 +123,21 @@ public class GameController : MonoBehaviour
                 BlockMover mover = tr.gameObject.AddComponent<BlockMover>() as BlockMover;
                 mover.oscilation = (tr.currentSprite == 10 ? new Vector3(3, 0) : new Vector3(0, 3) );
             }
-
+            
             if (tr.currentSprite == 9)
             {
                 BlockSpring spring = tr.gameObject.AddComponent<BlockSpring>() as BlockSpring;
                 spring.player = player;
             }
+            
+            if (tr.currentSprite == 13)
+            {
+                tr.gameObject.name = Utils.NAME_COIN;
+                tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
+                tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+            }
 
-            if (tr.currentSprite == 0)
+            if (tr.currentSprite == 5)
             {
                 tr.gameObject.name = Utils.NAME_TILE_END_FLAG;
                 tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
@@ -148,7 +155,7 @@ public class GameController : MonoBehaviour
     {
         TileRenderer tr;
         
-        
+        /*
         //Create end flag
         tr = (TileRenderer) Instantiate (tileRenderer);
         tr.tile = new Vector3 (GridRendering.COLS - 1, 1);
@@ -158,7 +165,7 @@ public class GameController : MonoBehaviour
         tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
         tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
 
-
+*/
         
         for (int i = 0; i < GridRendering.COLS; i++)
         {
@@ -243,6 +250,11 @@ public class GameController : MonoBehaviour
             gameText.enabled = true;
             
             StartCoroutine(YouDie());
+        }
+
+        if (name == Utils.NAME_COIN)
+        {
+            Destroy(col.gameObject);
         }
     }
     
