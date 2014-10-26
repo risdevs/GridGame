@@ -34,9 +34,12 @@ public class GameController : MonoBehaviour
         }
     }
 
+    private bool finished;
+
     // Use this for initialization
     void Start()
     {
+        finished = false;
         GridRendering rendering = Camera.main.GetComponent<GridRendering> ();
         Debug.Log("TileSize:" + rendering.tileSize);
         Debug.Log("LocalScale:" + player.transform.localScale);
@@ -97,7 +100,7 @@ public class GameController : MonoBehaviour
             }
             
             
-            if (tr.currentSprite == 6)
+            if (tr.currentSprite == 6 || tr.currentSprite == 15 || tr.currentSprite == 16)
             {
                 tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
                 tr.name = Utils.NAME_ENEMY_FOLLOWER;
@@ -265,6 +268,10 @@ public class GameController : MonoBehaviour
     
     IEnumerator YouWin()
     {
+        if (finished)
+            yield return null;
+        finished = true;
+
         ParseController.CompleteLevel(mapToLoad);
         yield return new WaitForSeconds(1.5f);
         LoadScene("Main");
@@ -272,6 +279,10 @@ public class GameController : MonoBehaviour
     
     IEnumerator YouDie()
     {
+        if (finished)
+            yield return null;
+        finished = true;
+
 		this.heroIsDead = true;
 		GameController.numDies = GameController.numDies + 1;
 	

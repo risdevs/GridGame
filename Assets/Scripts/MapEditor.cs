@@ -169,9 +169,38 @@ public class MapEditor : MonoBehaviour
         TileRenderer tr;
         int xy;
 
+        
+        tr = (TileRenderer) Instantiate (tilePrefab);
+        tr.tile = new Vector3 (0,0);
+        tr.currentSprite = 1;
+        tr.transform.parent = mapRoot.transform;
+        xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
+        if (tiles [xy] == null)
+        {
+            tiles [xy] = tr;
+        } else
+        {
+            Destroy(tr.gameObject);
+        }
+
+        
+        tr = (TileRenderer) Instantiate (tilePrefab);
+        tr.tile = new Vector3 (GridRendering.COLS - 1,0);
+        tr.currentSprite = 1;
+        tr.transform.parent = mapRoot.transform;
+        xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
+        if (tiles [xy] == null)
+        {
+            tiles [xy] = tr;
+        } else
+        {
+            Destroy(tr.gameObject);
+        }
+
 
         for (int i = 0; i < GridRendering.COLS; i++)
         {
+            /*
             tr = (TileRenderer) Instantiate (tilePrefab);
             tr.tile = new Vector3 (i,0);
             tr.currentSprite = 1;
@@ -179,7 +208,7 @@ public class MapEditor : MonoBehaviour
             xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
             tiles[xy] = tr;
 
-            /*
+
             tr = (TileRenderer) Instantiate (tilePrefab);
             tr.tile = new Vector3 (i,-1);
             tr.currentSprite = 0;
@@ -253,7 +282,7 @@ public class MapEditor : MonoBehaviour
 	{
 		Vector3 tile = gridRendering.WorldToTile(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 		
-		if (tile.x < 0 || tile.y < 0)
+		if (tile.x < 0 || tile.y < 0 || tile.x >= GridRendering.COLS || tile.y >= GridRendering.ROWS)
             return;
 
         Debug.Log("Remove tile: " + tile);
