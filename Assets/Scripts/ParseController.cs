@@ -187,9 +187,10 @@ public class ParseController : ParseInitializeBehaviour
         user.SaveAsync();
     }
 
-    public static int GetScore()
+    public static int GetScore(bool multiplayer)
     {
-        return ParseUser.CurrentUser.ContainsKey("spscore") ? int.Parse(ParseUser.CurrentUser.Get<object>("spscore").ToString()) : 0;
+        string key = multiplayer ? "mpscore" : "spscore";
+        return ParseUser.CurrentUser.ContainsKey(key) ? int.Parse(ParseUser.CurrentUser.Get<object>(key).ToString()) : 0;
     }
 
     public static void RenameUser(string name) {

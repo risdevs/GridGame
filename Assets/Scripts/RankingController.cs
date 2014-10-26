@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 public class RankingController : MonoBehaviour
 {
 
-    public UnityEngine.UI.InputField NameInput;
     public Canvas mainCanvas;
     public UnityEngine.UI.Text textPrefab;
 
@@ -15,10 +14,12 @@ public class RankingController : MonoBehaviour
 
     public List<UnityEngine.UI.Text> addedTexts = new List<UnityEngine.UI.Text>();
 
+    public UnityEngine.UI.Text textUsers;
+    public UnityEngine.UI.Text textScores;
+
     // Use this for initialization
     void Start()
     {
-        NameInput.text.text = ParseUser.CurrentUser.Username;
         Debug.Log("ranking start");
         LoadRanking(false);
     }
@@ -46,30 +47,19 @@ public class RankingController : MonoBehaviour
         int pos = 150;
         string field = multiplayer ? "mpscore" : "spscore";
         int rank = 1;
+        string users = "";
+        string scores = "";
         foreach (ParseUser u in o.result)
         {
-            UnityEngine.UI.Text textName = Instantiate(textPrefab) as UnityEngine.UI.Text;
-            textName.text = "" + rank + " - " + (u.ObjectId == ParseUser.CurrentUser.ObjectId ? " ---> " : "") + u.Username;
-            textName.transform.parent = mainCanvas.transform;
-            textName.transform.localPosition = new Vector3(-75,pos);
-            textName.alignment = TextAnchor.MiddleLeft;
-            addedTexts.Add(textName);
-            UnityEngine.UI.Text textScore = Instantiate(textPrefab) as UnityEngine.UI.Text;
-            textScore.text = u [field].ToString();
-            textScore.transform.parent = mainCanvas.transform;
-            textScore.transform.localPosition = new Vector3(75,pos);
-            textScore.alignment = TextAnchor.MiddleRight;
-            addedTexts.Add(textScore);
-            pos -= 45;
+            users += "" + rank + " - " + (u.ObjectId == ParseUser.CurrentUser.ObjectId ? " ---> " : "") + u.Username + "\n";
+            scores += u [field].ToString() + "\n";
             rank++;
 
         }
+        textUsers.text = users;
+        textScores.text = scores;
     }
 
-    public void UpdateName()
-    {
-        ParseController.RenameUser(NameInput.text.text);
-    }
     
     // Update is called once per frame
     void Update()
