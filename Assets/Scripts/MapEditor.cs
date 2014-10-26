@@ -157,9 +157,15 @@ public class MapEditor : MonoBehaviour
         }
         tiles[xy] = tr;
 
-        /*
+
         for (int i = 0; i < GridRendering.COLS; i++)
         {
+            tr = (TileRenderer) Instantiate (tilePrefab);
+            tr.tile = new Vector3 (i,0);
+            tr.currentSprite = 1;
+            tr.transform.parent = mapRoot.transform;
+
+            /*
             tr = (TileRenderer) Instantiate (tilePrefab);
             tr.tile = new Vector3 (i,-1);
             tr.currentSprite = 0;
@@ -170,13 +176,13 @@ public class MapEditor : MonoBehaviour
 
 
 
-            
             tr = (TileRenderer) Instantiate (tilePrefab);
             tr.tile = new Vector3 (i,GridRendering.ROWS);
             tr.currentSprite = 0;
             tr.transform.parent = mapRoot.transform;
+            */
         }
-
+        /*
         for (int i = 0; i < GridRendering.ROWS; i++)
         {
             tr = (TileRenderer) Instantiate (tilePrefab);
