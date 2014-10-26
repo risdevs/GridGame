@@ -118,6 +118,17 @@ public class GameController : MonoBehaviour
                 mover.oscilation = (tr.currentSprite == 7 ? new Vector3(3, 0) : new Vector3(0, 3) );
             }
 
+            if (tr.currentSprite == 10 || tr.currentSprite == 11)
+            {
+                BlockMover mover = tr.gameObject.AddComponent<BlockMover>() as BlockMover;
+                mover.oscilation = (tr.currentSprite == 10 ? new Vector3(3, 0) : new Vector3(0, 3) );
+            }
+
+            if (tr.currentSprite == 9)
+            {
+                BlockSpring spring = tr.gameObject.AddComponent<BlockSpring>() as BlockSpring;
+                spring.player = player;
+            }
 
             if (tr.currentSprite == 0)
             {

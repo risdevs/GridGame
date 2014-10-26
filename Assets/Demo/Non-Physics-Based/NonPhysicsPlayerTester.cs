@@ -28,7 +28,9 @@ public class NonPhysicsPlayerTester : MonoBehaviour
     bool RightOver = false;
     bool LeftOver = false;
     bool JumpOver = false;
-    
+
+    public bool spring = false;
+
     void Awake()
 	{
 		_animator = GetComponent<Animator>();
@@ -149,10 +151,10 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 
 
 		// we can only jump whilst grounded
-		if( _controller.isGrounded && (JumpPressed || JumpOver))
+		if(( _controller.isGrounded && (JumpPressed || JumpOver)) || spring)
 		{
             Debug.Log("Jump Height:" + jumpHeight);
-			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
+			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity * (spring ? 2 : 1));
 			_animator.Play( Animator.StringToHash( "Jump" ) );
 		}
 

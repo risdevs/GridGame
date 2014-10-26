@@ -22,7 +22,7 @@ TextureImporter:
     21300034: smb_textures_17
     21300036: smb_textures_18
     21300038: smb_textures_19
-    21300040: smb_textures_20
+    21300040: 10
     21300042: smb_textures_21
     21300044: smb_textures_22
     21300046: smb_textures_23
@@ -30,7 +30,7 @@ TextureImporter:
     21300050: smb_textures_25
     21300052: smb_textures_26
     21300054: smb_textures_27
-    21300056: smb_textures_28
+    21300056: 11
     21300058: smb_textures_29
     21300060: smb_textures_30
     21300062: smb_textures_31
@@ -75,7 +75,7 @@ TextureImporter:
     21300140: smb_textures_70
     21300142: smb_textures_71
     21300144: smb_textures_72
-    21300146: smb_textures_73
+    21300146: 09
     21300148: smb_textures_74
     21300150: smb_textures_75
     21300152: smb_textures_76
@@ -580,7 +580,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: smb_textures_20
+    - name: 10
       rect:
         serializedVersion: 2
         x: 352
@@ -660,7 +660,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: smb_textures_28
+    - name: 11
       rect:
         serializedVersion: 2
         x: 496
@@ -1110,7 +1110,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: smb_textures_73
+    - name: 09
       rect:
         serializedVersion: 2
         x: 80

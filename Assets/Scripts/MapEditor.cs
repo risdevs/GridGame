@@ -69,7 +69,10 @@ public class MapEditor : MonoBehaviour
             b = Instantiate(tileButtonPrefab) as Button;
             b.GetComponent<Image>().sprite = sprites[i];
             b.transform.parent = mainCanvas.transform;
-            b.transform.localPosition = new Vector3(50 + (sprites[i].bounds.size.x + 25) * 3 * (i-1) - 320, -170);
+            var col = (i-1) % 8;
+            var row = (int)Mathf.Round((i-1)/8);
+            b.transform.localPosition = new Vector3(50 + (sprites[i].bounds.size.x + 20) * 3 * col - 320, 
+                                                    -170 - row * (sprites[i].bounds.size.y + 20) * 3 );
             b.transform.localScale = new Vector3(3,3);
 
             int j = i;
