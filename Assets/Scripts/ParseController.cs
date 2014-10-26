@@ -283,7 +283,7 @@ public class ParseController : ParseInitializeBehaviour
                 Debug.Log("CURRENT USER ONLY");
                 q = q.WhereEqualTo("authorId", ParseUser.CurrentUser.ObjectId);
             }
-            q.OrderByDescending("timesPlayed")
+            q.OrderByDescending("createdAt")
                 .FindAsync().ContinueWith(t => {
                 var mapsDict = new Dictionary<int, MapEntity>();
                 Debug.Log("LIST MAP BUCLE");
