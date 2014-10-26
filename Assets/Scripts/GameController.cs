@@ -100,7 +100,7 @@ public class GameController : MonoBehaviour
             }
             
             
-            if (tr.currentSprite == 6)
+            if (tr.currentSprite == 6 || tr.currentSprite == 15 || tr.currentSprite == 16)
             {
                 tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
                 tr.name = Utils.NAME_ENEMY_FOLLOWER;
