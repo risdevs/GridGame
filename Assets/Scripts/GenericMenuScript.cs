@@ -29,6 +29,11 @@ public class GenericMenuScript : MonoBehaviour {
 	}
 
     public void UpdateUserName() {
-        ParseController.RenameUser(NameInput.text.text);
+        //ParseController.RenameUser(NameInput.text.text);
+    }
+
+    public void OnDestroy() {
+        if (NameInput != null) 
+            ParseController.RenameUser(NameInput.text.text);
     }
 }
