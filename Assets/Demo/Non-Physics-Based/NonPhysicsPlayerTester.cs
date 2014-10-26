@@ -156,6 +156,8 @@ public class NonPhysicsPlayerTester : MonoBehaviour
             Debug.Log("Jump Height:" + jumpHeight);
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity * (spring ? 2 : 1));
 			_animator.Play( Animator.StringToHash( "Jump" ) );
+
+			gameController.reproducirSonidoSalto();
 		}
 
 

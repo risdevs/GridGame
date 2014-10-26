@@ -8,7 +8,10 @@ using System.IO;
 public class GameController : MonoBehaviour
 {
 
-	public AudioClip salto;
+	public AudioClip saltoSound;
+	public AudioClip cogerMonedaSound;
+	public AudioClip muerteSound;
+	public AudioClip victoriaSound;
 
     private static float DEFAULT_TILE_SIZE = 1.125731f;
     private static float DEFAULT_TILE_HEIGHT = 800;
@@ -42,7 +45,7 @@ public class GameController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-		audio.PlayOneShot (salto);
+		audio.PlayOneShot (saltoSound);
         finished = false;
         GridRendering rendering = Camera.main.GetComponent<GridRendering> ();
         Debug.Log("TileSize:" + rendering.tileSize);
@@ -275,6 +278,7 @@ public class GameController : MonoBehaviour
         if (name == Utils.NAME_COIN)
         {
             Destroy(col.gameObject);
+			this.reproducirSonidoMoneda();
         }
     }
     
@@ -289,6 +293,9 @@ public class GameController : MonoBehaviour
             yield return null;
         finished = true;
 
+		audio.PlayOneShot (victoriaSound);
+		Camera.main.audio.Stop ();
+
         ParseController.CompleteLevel(mapToLoad);
         yield return new WaitForSeconds(1.5f);
         LoadScene("Main");
@@ -299,6 +306,9 @@ public class GameController : MonoBehaviour
         if (finished)
             yield return null;
         finished = true;
+
+		audio.PlayOneShot (muerteSound);
+		Camera.main.audio.Stop ();
 
 		this.heroIsDead = true;
 		GameController.numDies = GameController.numDies + 1;
@@ -321,4 +331,16 @@ public class GameController : MonoBehaviour
             Application.LoadLevel(scene);
         }
     }
+
+	public void reproducirSonidoSalto()
+	{
+		audio.PlayOneShot (saltoSound);
+		//Debug.Log("SONIDO SALTO");
+	}
+
+	public void reproducirSonidoMoneda()
+	{
+		audio.PlayOneShot (cogerMonedaSound);
+
+	}
 }
