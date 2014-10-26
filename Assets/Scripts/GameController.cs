@@ -7,6 +7,9 @@ using System.IO;
 
 public class GameController : MonoBehaviour
 {
+
+	public AudioClip salto;
+
     private static float DEFAULT_TILE_SIZE = 1.125731f;
     private static float DEFAULT_TILE_HEIGHT = 800;
     public static ParseController.MapEntity mapToLoad = null;
@@ -39,6 +42,7 @@ public class GameController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+		audio.PlayOneShot (salto);
         finished = false;
         GridRendering rendering = Camera.main.GetComponent<GridRendering> ();
         Debug.Log("TileSize:" + rendering.tileSize);
