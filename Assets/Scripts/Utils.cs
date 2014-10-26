@@ -6,6 +6,7 @@ public class Utils {
     public static string NAME_ENEMY_FOLLOWER = "FOLLOWER_ENEMY";
     public static string NAME_ENEMY_KOOPA = "KOOPA";
     public static string NAME_ENEMY_FIREBALL = "fireball";
+    public static string NAME_COIN = "coin";
     
     public static string NAME_TILE_END_FLAG = "END_FLAG";
     public static string NAME_TILE_DEAD     = "TILE_DEAD";

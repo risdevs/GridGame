@@ -123,11 +123,18 @@ public class GameController : MonoBehaviour
                 BlockMover mover = tr.gameObject.AddComponent<BlockMover>() as BlockMover;
                 mover.oscilation = (tr.currentSprite == 10 ? new Vector3(3, 0) : new Vector3(0, 3) );
             }
-
+            
             if (tr.currentSprite == 9)
             {
                 BlockSpring spring = tr.gameObject.AddComponent<BlockSpring>() as BlockSpring;
                 spring.player = player;
+            }
+            
+            if (tr.currentSprite == 13)
+            {
+                tr.gameObject.name = Utils.NAME_COIN;
+                tr.gameObject.layer = (int)Utils.LAYERS.Triggers;
+                tr.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
             }
 
             if (tr.currentSprite == 0)
@@ -243,6 +250,11 @@ public class GameController : MonoBehaviour
             gameText.enabled = true;
             
             StartCoroutine(YouDie());
+        }
+
+        if (name == Utils.NAME_COIN)
+        {
+            Destroy(col.gameObject);
         }
     }
     

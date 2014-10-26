@@ -164,6 +164,8 @@ public class MapEditor : MonoBehaviour
             tr.tile = new Vector3 (i,0);
             tr.currentSprite = 1;
             tr.transform.parent = mapRoot.transform;
+            xy = ((int)tr.tile.y) * GridRendering.COLS + ((int)tr.tile.x);
+            tiles[xy] = tr;
 
             /*
             tr = (TileRenderer) Instantiate (tilePrefab);
