@@ -75,7 +75,7 @@ TextureImporter:
     21300140: smb_textures_70
     21300142: smb_textures_71
     21300144: smb_textures_72
-    21300146: smb_textures_73
+    21300146: 09
     21300148: smb_textures_74
     21300150: smb_textures_75
     21300152: smb_textures_76
@@ -1110,7 +1110,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
-    - name: smb_textures_73
+    - name: 09
       rect:
         serializedVersion: 2
         x: 80
