@@ -282,7 +282,7 @@ public class MapEditor : MonoBehaviour
 	{
 		Vector3 tile = gridRendering.WorldToTile(Camera.main.ScreenToWorldPoint(Input.mousePosition));
 		
-		if (tile.x < 0 || tile.y < 0)
+		if (tile.x < 0 || tile.y < 0 || tile.x >= GridRendering.COLS || tile.y >= GridRendering.ROWS)
             return;
 
         Debug.Log("Remove tile: " + tile);
