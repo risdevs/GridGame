@@ -43,7 +43,7 @@ public class RankingController : MonoBehaviour
             yield return null;
         Debug.Log("load ranking complete");
 
-        int pos = 100;
+        int pos = 150;
         string field = multiplayer ? "mpscore" : "spscore";
         int rank = 1;
         foreach (ParseUser u in o.result)
@@ -51,16 +51,16 @@ public class RankingController : MonoBehaviour
             UnityEngine.UI.Text textName = Instantiate(textPrefab) as UnityEngine.UI.Text;
             textName.text = "" + rank + " - " + (u.ObjectId == ParseUser.CurrentUser.ObjectId ? " ---> " : "") + u.Username;
             textName.transform.parent = mainCanvas.transform;
-            textName.transform.localPosition = new Vector3(-30,pos);
+            textName.transform.localPosition = new Vector3(-75,pos);
             textName.alignment = TextAnchor.MiddleLeft;
             addedTexts.Add(textName);
             UnityEngine.UI.Text textScore = Instantiate(textPrefab) as UnityEngine.UI.Text;
             textScore.text = u [field].ToString();
             textScore.transform.parent = mainCanvas.transform;
-            textScore.transform.localPosition = new Vector3(30,pos);
+            textScore.transform.localPosition = new Vector3(75,pos);
             textScore.alignment = TextAnchor.MiddleRight;
             addedTexts.Add(textScore);
-            pos -= 20;
+            pos -= 45;
             rank++;
 
         }
