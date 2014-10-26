@@ -283,7 +283,7 @@ public class MapEditor : MonoBehaviour
   	}
     public void BackToMainMenu()
 	{
-		Application.LoadLevel("Main");
+		Application.LoadLevel("MultiPlayerMenu");
 	}
 
     public void PlayLevel()

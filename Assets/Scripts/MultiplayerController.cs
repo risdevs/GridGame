@@ -14,7 +14,6 @@ public class MultiplayerController : MonoBehaviour {
 	
 	public UnityEngine.UI.Button backButton;
 
-	int numPage = 0;
 
 	ParseController.MapEntity map1;
 	ParseController.MapEntity map2;
@@ -28,9 +27,13 @@ public class MultiplayerController : MonoBehaviour {
 
     int numButtonsPerPage=3;
 
-	public static string mode;
+    public static string previousmode;
+
+    public static string mode;
     	
-    public List<ParseController.MapEntity> mapList;
+    public static List<ParseController.MapEntity> mapList;
+
+    static int numPage = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -41,15 +44,24 @@ public class MultiplayerController : MonoBehaviour {
 
 		Debug.Log ("mode list maps " + mode);
 
-        mapList = new List<ParseController.MapEntity>();
-        RefreshButtons();
-        if (mode == "multiplayer" || mode == "mapeditor") 
-            StartCoroutine("LoadMaps");
-        else if (mode == "singleplayer")
+        if (mode == previousmode)
         {
-            LoadSinglePlayerMaps();
-            scoreText.text = "SCORE: " + ParseController.GetScore();
+            RefreshButtons();
+        } else
+        {
+            mapList = new List<ParseController.MapEntity>();
+            numPage = 0;
+            RefreshButtons();
+            if (mode == "multiplayer" || mode == "mapeditor") 
+                StartCoroutine("LoadMaps");
+            else if (mode == "singleplayer")
+            {
+                LoadSinglePlayerMaps();
+            }
         }
+
+        previousmode = mode;
+        scoreText.text = "SCORE: " + ParseController.GetScore(mode != "singleplayer");
 
 
 	}
