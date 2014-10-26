@@ -51,13 +51,13 @@ public class RankingController : MonoBehaviour
             UnityEngine.UI.Text textName = Instantiate(textPrefab) as UnityEngine.UI.Text;
             textName.text = "" + rank + " - " + (u.ObjectId == ParseUser.CurrentUser.ObjectId ? " ---> " : "") + u.Username;
             textName.transform.parent = mainCanvas.transform;
-            textName.transform.localPosition = new Vector3(-100,pos);
+            textName.transform.localPosition = new Vector3(-75,pos);
             textName.alignment = TextAnchor.MiddleLeft;
             addedTexts.Add(textName);
             UnityEngine.UI.Text textScore = Instantiate(textPrefab) as UnityEngine.UI.Text;
             textScore.text = u [field].ToString();
             textScore.transform.parent = mainCanvas.transform;
-            textScore.transform.localPosition = new Vector3(100,pos);
+            textScore.transform.localPosition = new Vector3(75,pos);
             textScore.alignment = TextAnchor.MiddleRight;
             addedTexts.Add(textScore);
             pos -= 45;
