@@ -10,7 +10,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 	public float runSpeed = 8f;
 	public float groundDamping = 20f; // how fast do we change direction? higher means faster
 	public float inAirDamping = 5f;
-	public float jumpHeight = 3f;
+	public float jumpHeight = 4.4f;
 
 	[HideInInspector]
 	private float normalizedHorizontalSpeed = 0;
@@ -151,6 +151,7 @@ public class NonPhysicsPlayerTester : MonoBehaviour
 		// we can only jump whilst grounded
 		if( _controller.isGrounded && (JumpPressed || JumpOver))
 		{
+            Debug.Log("Jump Height:" + jumpHeight);
 			_velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );
 			_animator.Play( Animator.StringToHash( "Jump" ) );
 		}

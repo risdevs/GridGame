@@ -63,7 +63,6 @@ public class MapEditor : MonoBehaviour
 
     private void LoadUI()
     {
-        Resolution res = Screen.currentResolution;
         Button b;
         for (int i = 1; i < sprites.Length; i++)
         {

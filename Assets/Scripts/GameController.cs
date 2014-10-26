@@ -8,6 +8,7 @@ using System.IO;
 public class GameController : MonoBehaviour
 {
     private static float DEFAULT_TILE_SIZE = 1.125731f;
+    private static float DEFAULT_TILE_HEIGHT = 800;
     public static ParseController.MapEntity mapToLoad = null;
     public static int sceneToBack = -1;
 
@@ -39,9 +40,27 @@ public class GameController : MonoBehaviour
         GridRendering rendering = Camera.main.GetComponent<GridRendering> ();
         Debug.Log("TileSize:" + rendering.tileSize);
         Debug.Log("LocalScale:" + player.transform.localScale);
-        player.transform.localScale += new Vector3(rendering.tileSize / DEFAULT_TILE_SIZE, rendering.tileSize / DEFAULT_TILE_SIZE);
+        player.transform.localScale += new Vector3(rendering.tileSize / DEFAULT_TILE_SIZE - 1, rendering.tileSize / DEFAULT_TILE_SIZE -1);
         Debug.Log("LocalScale:" + player.transform.localScale);
-        player.GetComponent<NonPhysicsPlayerTester>().jumpHeight += rendering.tileSize / DEFAULT_TILE_SIZE;
+        NonPhysicsPlayerTester nppt = player.GetComponent<NonPhysicsPlayerTester>();
+        Debug.Log("jump:" + nppt.jumpHeight);
+        nppt.jumpHeight += (rendering.tileSize / DEFAULT_TILE_SIZE);
+        nppt.gravity += (rendering.tileSize / DEFAULT_TILE_SIZE);
+        Debug.Log("jump:" + nppt.jumpHeight);
+
+        /*
+        GridRendering rendering = Camera.main.GetComponent<GridRendering> ();
+        player.transform.localScale += new Vector3(rendering.tileSize / DEFAULT_TILE_SIZE - 1, rendering.tileSize / DEFAULT_TILE_SIZE -1);
+
+
+        Resolution res = Screen.currentResolution;
+        float scale = res.height / DEFAULT_TILE_HEIGHT;
+        Debug.Log("h:" + res.height);
+        Debug.Log("scale:" + scale);
+        NonPhysicsPlayerTester nppt = player.GetComponent<NonPhysicsPlayerTester>();
+        */
+
+
 
 		GameController.lastLevel = Application.loadedLevel;
 		this.diesText.text = "Times Dead x " + GameController.numDies;
