@@ -24,6 +24,7 @@ public class MultiplayerController : MonoBehaviour {
     public UnityEngine.UI.Image flag3;
 
     public UnityEngine.UI.Text scoreText;
+    public UnityEngine.UI.Text levelCountText;
 
     int numButtonsPerPage=3;
 
@@ -219,6 +220,8 @@ UnityEngine.EventSystems.EventSystem:Update()
         }
         prevButton.enabled = numPage > 0;
         nextButton.enabled = (numPage + 1) * numButtonsPerPage < mapList.Count;
+
+        levelCountText.text = "Levels: " + mapList.Count;
     }
 
    
